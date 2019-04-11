@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * @author Jared Sullivan (jms8376@rit.edu)
+ * @author Bao Nguyen (btn6364@rit.edu)
  */
 public class WAMGUI extends Application //implements Observer<type>
 {
