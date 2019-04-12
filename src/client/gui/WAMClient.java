@@ -14,7 +14,6 @@ public class WAMClient
     private Socket clientSocket;
     private Scanner networkIn;
     private PrintStream networkOut;
-    private WAMBoard board;
     private boolean go;
     private String[] tokens;
 
@@ -22,17 +21,20 @@ public class WAMClient
 
     private synchronized void stop() {this.go = false;}
 
-    public WAMClient(String host, int port, WAMBoard board) throws Exception
+    public WAMClient(String host, int port) throws Exception
     {
         this.clientSocket = new Socket(host, port);
         this.networkIn = new Scanner(clientSocket.getInputStream());
         this.networkOut = new PrintStream(clientSocket.getOutputStream());
-        this.board = board;
         this.go = true;
 
         //
         tokens = this.networkIn.nextLine().split(" ");
-
+        if(!tokens[0].equals(WAMProtocol.WELCOME))
+        {
+            throw new Exception("Expected WELCOME from server");
+        }
+        System.out.println("Connected to server " + this.clientSocket);
     }
 
     public void startListener() throws Exception{
@@ -43,6 +45,12 @@ public class WAMClient
     {
 
     }
+
+    public void moleUp()
+    {
+
+    }
+
 
     private void run()
     {
@@ -55,10 +63,10 @@ public class WAMClient
             switch (request)
             {
                 case WAMProtocol.WELCOME:
-                    //TODO
+                    welcome(arguments);
                     break;
                 case WAMProtocol.MOLE_UP:
-                    //TODO
+
                     break;
                 case WAMProtocol.MOLE_DOWN:
                     //TODO
@@ -82,6 +90,10 @@ public class WAMClient
         }
     }
 
+    public static void main(String[] args) throws Exception
+    {
+        WAMClient client = new WAMClient(args[0], Integer.parseInt(args[1]));
+    }
 
 
 }
