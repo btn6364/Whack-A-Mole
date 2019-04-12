@@ -30,7 +30,7 @@ public class WAMServer implements Runnable
     {
         if (args.length != 5)
         {
-            System.out.println("Usage: game-port#  #rows  #columns  #players  game-duration-seconds");
+            System.out.println("Usage: port#  #rows  #columns  #players  game-duration-seconds");
             System.exit(-1);
         }
 
