@@ -25,13 +25,13 @@ public class WAMPlayer implements Closeable {
         }
     }
 
-    public void moleUp(int moleNum){
-        printer.println(moleNum);
+    public void moleUp(int moleNumber){
+        printer.println(moleNumber);
         printer.flush();
     }
 
-    public void moleDown(int moleNum){
-        printer.println(moleNum);
+    public void moleDown(int moleNumber){
+        printer.println(moleNumber);
         printer.flush();
     }
 
