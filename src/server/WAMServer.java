@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
 
 /**
@@ -12,6 +13,12 @@ public class WAMServer implements Runnable
 {
     //Used to wait for incoming connections
     private ServerSocket server;
+
+    private int ROWS;
+
+    private int COLUMNS;
+
+    private int numPlayers;
 
     /**
      * Creates a new WAMServer that listens for incoming connections on a
@@ -50,6 +57,23 @@ public class WAMServer implements Runnable
     public void run()
     {
         //TODO after WAMPlayer is created
+        try {
+            System.out.println("Waiting for player one...");
+            Socket playerOneSocket = server.accept();
+            WAMPlayer playerOne = new WAMPlayer(playerOneSocket);
+            playerOne.welcome(1,2,3,4);//need to fix this
+            System.out.println("Player one connected");
+            System.out.println("Starting game !");
+            //TODO: Create a WAMGame and start to run in a new thread
+
+
+        } catch (IOException ie){
+            System.err.println("Something bad has happened!!!");
+            ie.printStackTrace();
+        } catch (Exception e){
+            System.err.println("Failed to create the player!");
+            e.printStackTrace();
+        }
 
     }
 }

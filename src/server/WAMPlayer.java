@@ -25,13 +25,20 @@ public class WAMPlayer implements Closeable {
         }
     }
 
+
+    public void welcome(int rows, int col, int numOfPlayers, int playerIndex){
+        printer.println(WELCOME + " " + rows + " " + col + " " + numOfPlayers + " " + playerIndex);
+        printer.flush();
+    }
+
+
     public void moleUp(int moleNumber){
-        printer.println(moleNumber);
+        printer.println(MOLE_UP + moleNumber);
         printer.flush();
     }
 
     public void moleDown(int moleNumber){
-        printer.println(moleNumber);
+        printer.println(MOLE_DOWN + moleNumber);
         printer.flush();
     }
 
@@ -55,6 +62,14 @@ public class WAMPlayer implements Closeable {
         printer.flush();
     }
 
+    /**
+     *
+     * @param moleNumber
+     * @param playerNumber
+     */
+    public void whack(int moleNumber, int playerNumber) {
+
+    }
     @Override
     public void close(){
         try {
