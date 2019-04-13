@@ -1,5 +1,7 @@
 package server;
 
+import com.sun.prism.shader.Solid_TextureYV12_AlphaTest_Loader;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -49,6 +51,8 @@ public class WAMServer implements Runnable
     public int[] welcomeMessage()
     {
         //TODO for sending info to the client and GUI
+
+
         return null;
     }
 
@@ -61,7 +65,7 @@ public class WAMServer implements Runnable
             System.out.println("Waiting for player one...");
             Socket playerOneSocket = server.accept();
             WAMPlayer playerOne = new WAMPlayer(playerOneSocket);
-            playerOne.welcome(1,2,3,4);//need to fix this
+            //playerOne.welcome();need to fix this
             System.out.println("Player one connected");
             System.out.println("Starting game !");
             //TODO: Create a WAMGame and start to run in a new thread

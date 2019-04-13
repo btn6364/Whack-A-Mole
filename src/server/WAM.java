@@ -22,6 +22,10 @@ public class WAM {
         }
     }
 
+    public WAM(){
+        this(ROWS, COLS);
+    }
+
     public WAM(int rows, int cols){
         this.rows = rows;
         this.cols = cols;
@@ -32,6 +36,20 @@ public class WAM {
                 board[col][row] = Case.DOWN;
             }
         }
+    }
+
+    public void Up(){
+        for (int col = 0; col < cols; col++){
+            for (int row = 0; row < rows; row++) {
+
+            }
+        }
+    }
+
+    public void main(String[] args){
+
+
+
     }
 
 }
