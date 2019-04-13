@@ -15,6 +15,7 @@ public class WAMClient
     private Scanner networkIn;
     private PrintStream networkOut;
     private boolean go;
+    private WAMBoard board;
     private String[] tokens;
 
     private synchronized boolean isGo() {return this.go;}

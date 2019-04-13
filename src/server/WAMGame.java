@@ -1,24 +1,18 @@
 package server;
 
 public class WAMGame implements Runnable{
-
     private WAMPlayer playerOne;
-    private WAMPlayer playerTwo;
-    private WAMPlayer playerThree;
-    private WAM game; //TODO
 
-    public WAMGame(WAMPlayer playerOne, WAMPlayer playerTwo,
-                   WAMPlayer playerThree)
-    {
+    private WAM game;
+
+    public WAMGame(WAMPlayer playerOne){
         this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
-        this.playerThree = playerThree;
 
+        this.game = new WAM();
     }
 
     @Override
-    public void run()
-    {
+    public void run(){
 
     }
 }
