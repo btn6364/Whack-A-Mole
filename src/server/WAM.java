@@ -1,9 +1,6 @@
 package server;
 
 public class WAM {
-    public final static int ROWS = 6;
-    public final static int COLS = 7;
-
     private int rows;
     private int cols;
     private Case[][] board;
