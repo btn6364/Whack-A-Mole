@@ -51,8 +51,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
     public int[] getBoardSize()
     {
-
-        board.getSize();
+        return null;
     }
 
 

@@ -1,5 +1,6 @@
 package client.gui;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
@@ -11,6 +12,7 @@ import common.WAMProtocol;
  */
 public class WAMClient
 {
+
     private Socket clientSocket;
     private Scanner networkIn;
     private PrintStream networkOut;
@@ -24,30 +26,52 @@ public class WAMClient
 
 
 
-    public WAMClient(String host, int port, WAMBoard board) throws Exception
+    public WAMClient(String host, int port, WAMBoard board)
     {
-        this.clientSocket = new Socket(host, port);
-        this.networkIn = new Scanner(clientSocket.getInputStream());
-        this.networkOut = new PrintStream(clientSocket.getOutputStream());
-        this.board = board;
-        this.go = true;
+        try {
+            this.clientSocket = new Socket(host, port);
+            this.networkIn = new Scanner(clientSocket.getInputStream());
+            this.networkOut = new PrintStream(clientSocket.getOutputStream());
+            this.board = board;
+            this.go = true;
+            //Block waiting for the WELCOME message from the server
+            String request = this.networkIn.next();
+            tokens = request.split(" ");
+            if (!tokens[0].equals(WAMProtocol.WELCOME)){
+                throw new Exception("Expected WELCOME message from the server");
+            }
+            System.out.println("Connected to server " + this.clientSocket );
 
-        //
-        tokens = this.networkIn.nextLine().split(" ");
-        if(!tokens[0].equals(WAMProtocol.WELCOME))
-        {
-            throw new Exception("Expected WELCOME from server");
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        System.out.println("Connected to server " + this.clientSocket);
+
+
+
     }
 
     public void startListener() throws Exception{
         new Thread(() -> this.run()).start();
     }
 
-    public void welcome(String arguments){
-        //TODO ignore for now
+    public int getRow(){
+        int row = Integer.parseInt(tokens[1]);
+        return row;
+    }
 
+    public int getColumn(){
+        int col = Integer.parseInt(tokens[2]);
+        return col;
+    }
+
+
+    public void close(){
+        try{
+            this.clientSocket.close();
+        } catch (IOException ioe){
+
+        }
+        this.board.close();
     }
 
     public void moleUp(String arguments){
@@ -67,47 +91,44 @@ public class WAMClient
     }
 
 
-    private void run()
-    {
-        while (this.isGo())
-        {
-            String request = this.networkIn.next();
-            String arguments = this.networkIn.nextLine().trim();
-            System.out.println("Network in message = \"" + request + '"');
-            switch (request)
-            {
-                case WAMProtocol.WELCOME:
-                    //TODO
-                    break;
-                case WAMProtocol.MOLE_UP:
-                    moleUp(arguments);
-                    break;
-                case WAMProtocol.MOLE_DOWN:
-                    moleDown(arguments);
-                    break;
-                case WAMProtocol.SCORE:
-                    //TODO
-                    break;
-                case WAMProtocol.GAME_WON:
-                    //TODO
-                    break;
-                case WAMProtocol.GAME_LOST:
-                    //TODO
-                    break;
-                case WAMProtocol.GAME_TIED:
-                    //TODO
-                    break;
-                case WAMProtocol.ERROR:
-                    //TODO
-                    break;
+    private void run() {
+        while (this.isGo()) {
+            try {
+                String request = this.networkIn.next();
+                String arguments = this.networkIn.nextLine().trim();
+                System.out.println("Network in message = \"" + request + '"');
+
+                switch (request) {
+                    case WAMProtocol.WELCOME:
+                        //TODO
+                        break;
+                    case WAMProtocol.MOLE_UP:
+                        moleUp(arguments);
+                        break;
+                    case WAMProtocol.MOLE_DOWN:
+                        moleDown(arguments);
+                        break;
+                    case WAMProtocol.SCORE:
+                        //TODO
+                        break;
+                    case WAMProtocol.GAME_WON:
+                        //TODO
+                        break;
+                    case WAMProtocol.GAME_LOST:
+                        //TODO
+                        break;
+                    case WAMProtocol.GAME_TIED:
+                        //TODO
+                        break;
+                    case WAMProtocol.ERROR:
+                        //TODO
+                        break;
+                }
+            } catch (Exception e){
+                this.stop();
             }
         }
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-//        WAMClient client = new WAMClient(args[0], Integer.parseInt(args[1]));
-//        client.startListener();
+        this.close();
     }
 
 
