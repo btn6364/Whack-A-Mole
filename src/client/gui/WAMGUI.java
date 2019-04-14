@@ -49,12 +49,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         }
     }
 
-    public int[] getBoardSize()
-    {
-
-        board.getSize();
-    }
-
 
     public void start(Stage stage) throws Exception {
             this.stage = stage;

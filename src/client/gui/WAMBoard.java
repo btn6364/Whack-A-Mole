@@ -10,9 +10,9 @@ import java.util.List;
  * @author Bao Nguyen (btn6364@rit.edu)
  */
 public class WAMBoard{
-    public final static int ROWS = 6;
+    public int ROWS;
 
-    public final static int COLS = 7;
+    public int COLS;
 
     private List<Observer<WAMBoard>> observers;
 
@@ -30,8 +30,10 @@ public class WAMBoard{
 
 
 
-    public WAMBoard(){
+    public WAMBoard(int COLS, int ROWS){
         this.observers = new LinkedList<>();
+        this.COLS = COLS;
+        this.ROWS = ROWS;
 
         this.board = new int[COLS][ROWS];
         for(int col = 0; col < COLS; col++){
@@ -48,6 +50,22 @@ public class WAMBoard{
 
     public void setContents(int col, int row, int value){
         this.board[col][row] = value;
+    }
+
+    public int getROWS()
+    {return this.ROWS;}
+
+    public int getCOLS()
+    {return this.COLS;}
+
+    public void setSize(int COLS, int ROWS)
+    {
+
+    }
+
+    public int getSize()
+    {
+        return observers.size();
     }
 
 }

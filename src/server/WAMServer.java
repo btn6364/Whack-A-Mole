@@ -22,6 +22,8 @@ public class WAMServer implements Runnable
 
     private int numPlayers;
 
+    private String[] args;
+
     /**
      * Creates a new WAMServer that listens for incoming connections on a
      * specified port
@@ -32,6 +34,10 @@ public class WAMServer implements Runnable
     public WAMServer(int port) throws Exception
     {
         this.server = new ServerSocket(port);
+        String argsString = System.getProperties().toString();
+        this.args = argsString.split(" ");
+        this.COLUMNS = Integer.parseInt(args[2]);
+        this.ROWS = Integer.parseInt(args[1]);
     }
 
 
@@ -50,7 +56,7 @@ public class WAMServer implements Runnable
 
     public int[] welcomeMessage()
     {
-        //TODO for sending info to the client and GUI
+    //TODO for sending info to the client and GUI
         int[] ints = new int[2];
         ints[0] = COLUMNS;
         ints[1] = ROWS;
