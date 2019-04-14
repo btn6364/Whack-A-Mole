@@ -10,9 +10,9 @@ import java.util.List;
  * @author Bao Nguyen (btn6364@rit.edu)
  */
 public class WAMBoard{
-    public final static int ROWS = 6;// Need to get a generic number from server
+    public final static int ROWS = 6;
 
-    public final static int COLS = 7;// Need to get a generic number from the server
+    public final static int COLS = 7;
 
     private List<Observer<WAMBoard>> observers;
 
@@ -40,10 +40,6 @@ public class WAMBoard{
             }
         }
 
-    }
-
-    public void close(){
-        alertObservers();
     }
 
     public int getContents(int col, int row){
