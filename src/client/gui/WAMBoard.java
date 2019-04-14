@@ -50,4 +50,8 @@ public class WAMBoard{
         this.board[col][row] = value;
     }
 
+    public void close(){
+        alertObservers();
+    }
+
 }
