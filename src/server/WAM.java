@@ -19,9 +19,6 @@ public class WAM {
         }
     }
 
-    public WAM(){
-        this(ROWS, COLS);
-    }
 
     public WAM(int rows, int cols){
         this.rows = rows;
