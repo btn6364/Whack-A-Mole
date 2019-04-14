@@ -104,11 +104,11 @@ public class WAMClient
         }
     }
 
-    public static void main(String[] args) throws Exception
-    {
+//    public static void main(String[] args) throws Exception
+//    {
 //        WAMClient client = new WAMClient(args[0], Integer.parseInt(args[1]));
 //        client.startListener();
-    }
+//    }
 
 
 }

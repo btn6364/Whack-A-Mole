@@ -44,16 +44,18 @@ public class WAMServer implements Runnable
         }
 
         int port = Integer.parseInt(args[0]);
-        WAMServer server = new WAMServer(port);
-        server.run();
+        WAMServer wamServer = new WAMServer(port);
+        wamServer.run();
     }
 
     public int[] welcomeMessage()
     {
         //TODO for sending info to the client and GUI
+        int[] ints = new int[2];
+        ints[0] = COLUMNS;
+        ints[1] = ROWS;
+        return ints;
 
-
-        return null;
     }
 
 

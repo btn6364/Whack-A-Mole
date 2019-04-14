@@ -1,5 +1,7 @@
 package client.gui;
 
+import server.WAMServer;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,10 +49,5 @@ public class WAMBoard{
     public void setContents(int col, int row, int value){
         this.board[col][row] = value;
     }
-
-
-
-
-
 
 }

@@ -52,7 +52,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     public int[] getBoardSize()
     {
 
-        return null;
+        board.getSize();
     }
 
 
@@ -114,7 +114,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                     image = holeImage;
                 }
                 ImageView view = new ImageView(image);
-                gridPane.add(view, c, r);
+                buttons[c][r].setGraphic(view);
+                gridPane.add(buttons[c][r], c, r);
 
             }
         }

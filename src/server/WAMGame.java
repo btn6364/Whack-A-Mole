@@ -7,8 +7,6 @@ public class WAMGame implements Runnable{
 
     public WAMGame(WAMPlayer playerOne){
         this.playerOne = playerOne;
-
-        this.game = new WAM();
     }
 
     @Override
