@@ -61,23 +61,23 @@ public class WAMServer implements Runnable
     public void run()
     {
         //TODO after WAMPlayer is created
-        try {
-            System.out.println("Waiting for player one...");
-            Socket playerOneSocket = server.accept();
-            WAMPlayer playerOne = new WAMPlayer(playerOneSocket);
-            //playerOne.welcome();need to fix this
-            System.out.println("Player one connected");
-            System.out.println("Starting game !");
-            //TODO: Create a WAMGame and start to run in a new thread
-
-
-        } catch (IOException ie){
-            System.err.println("Something bad has happened!!!");
-            ie.printStackTrace();
-        } catch (Exception e){
-            System.err.println("Failed to create the player!");
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println("Waiting for player one...");
+//            Socket playerOneSocket = server.accept();
+//            WAMPlayer playerOne = new WAMPlayer(playerOneSocket);
+//            //playerOne.welcome();need to fix this
+//            System.out.println("Player one connected");
+//            System.out.println("Starting game !");
+//            //TODO: Create a WAMGame and start to run in a new thread
+//
+//
+//        } catch (IOException ie){
+//            System.err.println("Something bad has happened!!!");
+//            ie.printStackTrace();
+//        } catch (Exception e){
+//            System.err.println("Failed to create the player!");
+//            e.printStackTrace();
+//        }
 
     }
 }

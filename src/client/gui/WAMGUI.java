@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import server.WAM;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Jared Sullivan (jms8376@rit.edu)
@@ -23,30 +24,47 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
     private Button[][] buttons;
 
+    private WAMBoard board;
+
+    private WAMClient serverConn;
+
+    private Stage stage;
+
     public void init() throws Exception
     {
-        List<String> args = getParameters().getRaw();
-        String host = args.get(0);
-        int port = Integer.parseInt(args.get(1));
-        //TODO getBoardSize(server)
+        try {
+            List<String> args = getParameters().getRaw();
+            String host = args.get(0);
+            int port = Integer.parseInt(args.get(1));
+            //TODO getBoardSize(server)
+            this.board = new WAMBoard();
 
+            this.board.addObserver(this);
 
+            this.serverConn = new WAMClient(host, port, this.board);
+        } catch (ArrayIndexOutOfBoundsException |
+                NumberFormatException e) {
+            System.err.println(e);
+            throw new RuntimeException(e);
+        }
     }
 
     public int[] getBoardSize()
     {
+
         return null;
     }
 
 
-    public void start(Stage stage)
-    {
+    public void start(Stage stage) throws Exception {
+            this.stage = stage;
+
             // get the command line args
             List<String> args = getParameters().getRaw();
 
             //TODO get rows and cols from the server's WELCOME message
-            int COLS = 3;
-            int ROWS = 3;
+            int COLS = WAMBoard.COLS;
+            int ROWS = WAMBoard.ROWS;
 
             GridPane gridPane = new GridPane();
             buttons = new Button[COLS][ROWS];
@@ -82,11 +100,15 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     //            button.setDisable(true);
     //        }
 
+
+
             Scene scene = new Scene(gridPane);
             stage.setTitle("WAMGUI");
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
+
+            this.serverConn.startListener();
 
 
     }
@@ -94,6 +116,29 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
     private void refresh(WAMBoard board){
         //TODO: update GUI here
+        this.board = board;
+        GridPane gridPane = new GridPane();
+        for (int r = 0; r < WAMBoard.ROWS; r++){
+            for (int c = 0; c < WAMBoard.COLS; c++){
+                int position = board.getContents(c,r);
+                Image image = holeImage;
+                Random random = new Random();
+                int randomNumber = random.nextInt(1-0) + 0;
+                if (randomNumber==1){
+                    image = moleImage;
+                } else {
+                    image = holeImage;
+                }
+                ImageView view = new ImageView(image);
+                gridPane.add(view, c, r);
+
+            }
+        }
+        Scene scene = new Scene(gridPane);
+        stage.setScene(scene);
+        stage.show();
+        stage.setAlwaysOnTop(true);
+        stage.setAlwaysOnTop(false);
     }
 
     private synchronized void endGame(){
