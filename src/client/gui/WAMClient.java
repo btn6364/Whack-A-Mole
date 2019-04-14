@@ -22,11 +22,14 @@ public class WAMClient
 
     private synchronized void stop() {this.go = false;}
 
-    public WAMClient(String host, int port) throws Exception
+
+
+    public WAMClient(String host, int port, WAMBoard board) throws Exception
     {
         this.clientSocket = new Socket(host, port);
         this.networkIn = new Scanner(clientSocket.getInputStream());
         this.networkOut = new PrintStream(clientSocket.getOutputStream());
+        this.board = board;
         this.go = true;
 
         //
@@ -42,14 +45,25 @@ public class WAMClient
         new Thread(() -> this.run()).start();
     }
 
-    public void welcome(String arguments)
-    {
+    public void welcome(String arguments){
+        //TODO ignore for now
 
     }
 
-    public void moleUp()
-    {
+    public void moleUp(String arguments){
+        int moleNumber = Integer.parseInt(arguments);
+        int row = moleNumber / WAMBoard.COLS;
+        int col = moleNumber % WAMBoard.ROWS;
+        this.board.setContents(col, row, 1 );
+        this.board.alertObservers();
 
+    }
+    public void moleDown(String arguments){
+        int moleNumber = Integer.parseInt(arguments);
+        int row = moleNumber / WAMBoard.COLS;
+        int col = moleNumber % WAMBoard.ROWS;
+        this.board.setContents(col, row, 0);
+        this.board.alertObservers();
     }
 
 
@@ -60,17 +74,16 @@ public class WAMClient
             String request = this.networkIn.next();
             String arguments = this.networkIn.nextLine().trim();
             System.out.println("Network in message = \"" + request + '"');
-
             switch (request)
             {
                 case WAMProtocol.WELCOME:
-                    welcome(arguments);
+                    //TODO
                     break;
                 case WAMProtocol.MOLE_UP:
-
+                    moleUp(arguments);
                     break;
                 case WAMProtocol.MOLE_DOWN:
-                    //TODO
+                    moleDown(arguments);
                     break;
                 case WAMProtocol.SCORE:
                     //TODO
@@ -93,7 +106,8 @@ public class WAMClient
 
     public static void main(String[] args) throws Exception
     {
-        WAMClient client = new WAMClient(args[0], Integer.parseInt(args[1]));
+//        WAMClient client = new WAMClient(args[0], Integer.parseInt(args[1]));
+//        client.startListener();
     }
 
 
