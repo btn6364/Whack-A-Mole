@@ -46,19 +46,24 @@ public class WAMClient
     }
 
     public void welcome(String arguments){
-
-
-
+        //TODO ignore for now
 
     }
 
-    public void moleUp(){
-
-
+    public void moleUp(String arguments){
+        int moleNumber = Integer.parseInt(arguments);
+        int row = moleNumber / WAMBoard.COLS;
+        int col = moleNumber % WAMBoard.ROWS;
+        this.board.setContents(col, row, 1 );
+        this.board.alertObservers();
 
     }
-    public void moleDown(){
-
+    public void moleDown(String arguments){
+        int moleNumber = Integer.parseInt(arguments);
+        int row = moleNumber / WAMBoard.COLS;
+        int col = moleNumber % WAMBoard.ROWS;
+        this.board.setContents(col, row, 0);
+        this.board.alertObservers();
     }
 
 
@@ -72,13 +77,13 @@ public class WAMClient
             switch (request)
             {
                 case WAMProtocol.WELCOME:
-                    welcome(arguments);
+                    //TODO
                     break;
                 case WAMProtocol.MOLE_UP:
-                    moleUp();
+                    moleUp(arguments);
                     break;
                 case WAMProtocol.MOLE_DOWN:
-                    //TODO
+                    moleDown(arguments);
                     break;
                 case WAMProtocol.SCORE:
                     //TODO

@@ -88,19 +88,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             gridPane.add(score, 0, ROWS);
 
 
-            // TODO
-    //        for (int i = 0; i < COLS; i++)
-    //        {
-    //            int x = i;
-    //            Button button = buttons[i];
-    //            button.setOnAction(event ->
-    //            {
-    //                client1.sendMove(x);
-    //            });
-    //            button.setDisable(true);
-    //        }
-
-
 
             Scene scene = new Scene(gridPane);
             stage.setTitle("WAMGUI");
@@ -115,16 +102,13 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
 
     private void refresh(WAMBoard board){
-        //TODO: update GUI here
         this.board = board;
         GridPane gridPane = new GridPane();
         for (int r = 0; r < WAMBoard.ROWS; r++){
             for (int c = 0; c < WAMBoard.COLS; c++){
-                int position = board.getContents(c,r);
                 Image image = holeImage;
-                Random random = new Random();
-                int randomNumber = random.nextInt(1-0) + 0;
-                if (randomNumber==1){
+                int content = board.getContents(c, r);
+                if (content == 1){
                     image = moleImage;
                 } else {
                     image = holeImage;

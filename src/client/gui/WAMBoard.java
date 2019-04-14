@@ -40,11 +40,13 @@ public class WAMBoard{
 
     }
 
-    public int getContents(int row, int col){
-        return this.board[row][col];
+    public int getContents(int col, int row){
+        return this.board[col][row];
     }
 
-
+    public void setContents(int col, int row, int value){
+        this.board[col][row] = value;
+    }
 
 
 
