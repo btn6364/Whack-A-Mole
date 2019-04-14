@@ -51,8 +51,13 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
     public int[] getBoardSize()
     {
-
-        return null;
+        //String welcomeMessage = serverConn.welcome(); //TODO this is where we get the size
+        String welcomeMessage = "WELCOME 7 7 1 30";
+        String[] strings = welcomeMessage.split(" ");
+        int[] ints = new int[2];
+        ints[1] = Integer.parseInt(strings[1]);
+        ints[0] = Integer.parseInt(strings[2]);
+        return ints;
     }
 
 
@@ -63,8 +68,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             List<String> args = getParameters().getRaw();
 
             //TODO get rows and cols from the server's WELCOME message
-            int COLS = WAMBoard.COLS;
-            int ROWS = WAMBoard.ROWS;
+            int COLS = getBoardSize()[0];
+            int ROWS = getBoardSize()[1];
 
             GridPane gridPane = new GridPane();
             buttons = new Button[COLS][ROWS];
@@ -114,7 +119,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                     image = holeImage;
                 }
                 ImageView view = new ImageView(image);
-                gridPane.add(view, c, r);
+                buttons[c][r].setGraphic(view);
+                gridPane.add(buttons[c][r], c, r);
 
             }
         }

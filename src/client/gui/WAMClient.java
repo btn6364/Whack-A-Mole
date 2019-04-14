@@ -1,7 +1,9 @@
 package client.gui;
 
 import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 import common.WAMProtocol;
 
@@ -32,22 +34,22 @@ public class WAMClient
         this.board = board;
         this.go = true;
 
-        //
+
         tokens = this.networkIn.nextLine().split(" ");
         if(!tokens[0].equals(WAMProtocol.WELCOME))
         {
             throw new Exception("Expected WELCOME from server");
         }
         System.out.println("Connected to server " + this.clientSocket);
+        String arguments = this.networkIn.nextLine();
     }
 
     public void startListener() throws Exception{
         new Thread(() -> this.run()).start();
     }
 
-    public void welcome(String arguments){
-        //TODO ignore for now
-
+    public String welcome(String arguments){
+        return arguments;
     }
 
     public void moleUp(String arguments){
@@ -56,8 +58,8 @@ public class WAMClient
         int col = moleNumber % WAMBoard.ROWS;
         this.board.setContents(col, row, 1 );
         this.board.alertObservers();
-
     }
+
     public void moleDown(String arguments){
         int moleNumber = Integer.parseInt(arguments);
         int row = moleNumber / WAMBoard.COLS;
@@ -73,11 +75,12 @@ public class WAMClient
         {
             String request = this.networkIn.next();
             String arguments = this.networkIn.nextLine().trim();
+            String[] argumentArray = arguments.split(" ");
             System.out.println("Network in message = \"" + request + '"');
             switch (request)
             {
                 case WAMProtocol.WELCOME:
-                    //TODO
+                    welcome(arguments);
                     break;
                 case WAMProtocol.MOLE_UP:
                     moleUp(arguments);
