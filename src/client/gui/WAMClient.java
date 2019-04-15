@@ -45,22 +45,22 @@ public class WAMClient
      *
      * @param host  the name of the host running the server program
      * @param port  the port of the server socket on which the server is listening
-     * @param WAMboard the local object holding the state of the game that
+     * @param board the local object holding the state of the game that
      *              must be updated upon receiving server messages
      * @throws Exception If there is a problem opening the connection
      */
-    public WAMClient(String host, int port, WAMBoard WAMboard)
+    public WAMClient(String host, int port, WAMBoard board)
     {
         try {
             this.clientSocket = new Socket(host, port);
             this.networkIn = new Scanner(clientSocket.getInputStream());
             this.networkOut = new PrintStream(clientSocket.getOutputStream());
+            this.board = board;
             this.go = true;
             //Block waiting for the WELCOME message from the server
             String request = this.networkIn.nextLine();
             this.tokens = request.split("\\s");
-            WAMboard.setSize(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
-            this.board = WAMboard;
+            WAMBoard.store(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
             if (!tokens[0].equals(WAMProtocol.WELCOME)){
                 throw new Exception("Expected WELCOME message from the server");
             }
@@ -70,6 +70,7 @@ public class WAMClient
             e.printStackTrace();
         }
     }
+
 
     /**
      * Called from the GUI when it is ready to start receiving messages

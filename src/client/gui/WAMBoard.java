@@ -22,6 +22,8 @@ public class WAMBoard{
     /** the board */
     private int[][] board;
 
+    private static int[] storage = new int[2];
+
     /**
      * The view calls this method to add themselves as an observer of the model.
      *
@@ -38,9 +40,17 @@ public class WAMBoard{
         }
     }
 
-    public void setSize(int rows, int cols){
-        this.rows = rows;
-        this.cols = cols;
+    /**
+     * Set the size of the game
+     */
+    public void setSize(){
+        this.rows = storage[0];
+        this.cols = storage[1];
+    }
+
+    public static void store(int rows, int cols){
+        storage[0] = rows;
+        storage[1] = cols;
     }
 
     /**
