@@ -41,10 +41,7 @@ public class WAMClient
 
     /**
      * Hook up with a Whack-A-Mole game server already running and waiting for
-     * two players to connect. Because of the nature of the server
-     * protocol, this constructor actually blocks waiting for the first
-     * message (welcome) from the server.  Afterwards a thread that listens for
-     * server messages and forwards them to the game object is started.
+     * the player to connect.
      *
      * @param host  the name of the host running the server program
      * @param port  the port of the server socket on which the server is listening
