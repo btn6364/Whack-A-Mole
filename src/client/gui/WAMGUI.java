@@ -9,37 +9,58 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import server.WAM;
 
 import java.util.List;
-import java.util.Random;
 
 /**
+ * A JavaFX GUI for the networked Whack-A-Mole game.
+ *
  * @author Jared Sullivan (jms8376@rit.edu)
  * @author Bao Nguyen (btn6364@rit.edu)
  */
 public class WAMGUI extends Application implements Observer<WAMBoard>{
+    /**
+     * a hole image.
+     */
     private Image holeImage = new Image(getClass().getResourceAsStream("holeimage.png"));
+
+    /**
+     * a mole image.
+     */
     private Image moleImage = new Image(getClass().getResourceAsStream("moleimage.png"));
 
+    /**
+     * An array of Button
+     */
     private Button[][] buttons;
 
+    /**
+     * the model
+     */
     private WAMBoard board;
 
+    /**
+     * connection to network interface to server
+     */
     private WAMClient serverConn;
 
+    /**
+     * the stage of game
+     */
     private Stage stage;
 
+    @Override
     public void init() throws Exception
     {
         try {
             List<String> args = getParameters().getRaw();
             String host = args.get(0);
             int port = Integer.parseInt(args.get(1));
-            //TODO getBoardSize(server)
+
             this.board = new WAMBoard();
 
             this.board.addObserver(this);
+
 
             this.serverConn = new WAMClient(host, port, this.board);
         } catch (ArrayIndexOutOfBoundsException |
@@ -49,36 +70,28 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         }
     }
 
-    public int[] getBoardSize()
-    {
-        //String welcomeMessage = serverConn.welcome(); //TODO this is where we get the size
-        String welcomeMessage = "WELCOME 7 7 1 30";
-        String[] strings = welcomeMessage.split(" ");
-        int[] ints = new int[2];
-        ints[1] = Integer.parseInt(strings[1]);
-        ints[0] = Integer.parseInt(strings[2]);
-        return ints;
-    }
-
-
+    /**
+     * Construct the layout for the game.
+     *
+     * @param stage container (window) in which to render the GUI
+     * @throws Exception if there is a problem
+     */
     public void start(Stage stage) throws Exception {
             this.stage = stage;
 
             // get the command line args
             List<String> args = getParameters().getRaw();
 
-            //TODO get rows and cols from the server's WELCOME message
-            int COLS = getBoardSize()[0];
-            int ROWS = getBoardSize()[1];
+            // get rows and cols from the server's WELCOME message
+            int COLS = serverConn.getColumn();
+            int ROWS = serverConn.getRow();
 
             GridPane gridPane = new GridPane();
             buttons = new Button[COLS][ROWS];
 
 
-            for (int row = 0; row < ROWS; row++)
-            {
-                for (int col = 0; col < COLS; col++)
-                {
+            for (int row = 0; row < ROWS; row++) {
+                for (int col = 0; col < COLS; col++) {
                     Button button = new Button();
                     ImageView moleImageView = new ImageView(holeImage);
                     button.setGraphic(moleImageView);
@@ -105,12 +118,15 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
     }
 
-
+    /**
+     * Do all the GUI update
+     * @param board the model of the game
+     */
     private void refresh(WAMBoard board){
         this.board = board;
         GridPane gridPane = new GridPane();
-        for (int r = 0; r < WAMBoard.ROWS; r++){
-            for (int c = 0; c < WAMBoard.COLS; c++){
+        for (int r = 0; r < serverConn.getRow(); r++){
+            for (int c = 0; c < serverConn.getColumn(); c++){
                 Image image = holeImage;
                 int content = board.getContents(c, r);
                 if (content == 1){
@@ -131,10 +147,19 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         stage.setAlwaysOnTop(false);
     }
 
+    /**
+     * Notify the observer when the game ends.
+     */
     private synchronized void endGame(){
         this.notify();
     }
 
+    /**
+     * Called by the model, client.ConnectFourBoard, whenever there is a state change
+     * that needs to be updated by the GUI.
+     *
+     * @param board
+     */
     @Override
     public void update(WAMBoard board){
         if (Platform.isFxApplicationThread()){
@@ -144,7 +169,11 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
         }
     }
 
-
+    /**
+     * The main method expects the host and port.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args)
     {
         if (args.length != 2)
