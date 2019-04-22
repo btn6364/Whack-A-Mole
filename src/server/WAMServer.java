@@ -20,7 +20,7 @@ public class WAMServer implements Runnable
 
     private int COLUMNS;
 
-    private int numPlayers;
+    private int NUM_PLAYERS;
 
     private String[] args;
 
@@ -38,6 +38,7 @@ public class WAMServer implements Runnable
         this.args = argsString.split(" ");
         this.COLUMNS = Integer.parseInt(args[2]);
         this.ROWS = Integer.parseInt(args[1]);
+        this.NUM_PLAYERS= Integer.parseInt(args[3]);
     }
 
 

@@ -137,9 +137,11 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                 ImageView view = new ImageView(image);
                 buttons[c][r].setGraphic(view);
                 gridPane.add(buttons[c][r], c, r);
-
             }
         }
+        //TODO need to get scoring and time remaining and add here
+        gridPane.add(new Text("TIME: "), serverConn.getColumn()-1, serverConn.getRow()); //add time
+        gridPane.add(new Text("SCORE: "), 0, serverConn.getRow()); //add score
         Scene scene = new Scene(gridPane);
         stage.setScene(scene);
         stage.show();
