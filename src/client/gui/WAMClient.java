@@ -86,7 +86,7 @@ public class WAMClient
      * Called from the GUI when it is ready to start receiving messages
      * from the server.
      */
-    public void startListener() throws Exception{
+    public void startListener(){
         new Thread(() -> this.run()).start();
     }
 

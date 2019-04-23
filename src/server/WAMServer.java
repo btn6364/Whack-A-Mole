@@ -38,7 +38,7 @@ public class WAMServer implements Runnable
         this.args = argsString.split(" ");
         this.COLUMNS = Integer.parseInt(args[2]);
         this.ROWS = Integer.parseInt(args[1]);
-        this.NUM_PLAYERS= Integer.parseInt(args[3]);
+        this.NUM_PLAYERS = Integer.parseInt(args[3]);
     }
 
 
@@ -69,24 +69,31 @@ public class WAMServer implements Runnable
     @Override
     public void run()
     {
+        int numPlayers = 1;
         //TODO after WAMPlayer is created
-//        try {
-//            System.out.println("Waiting for player one...");
-//            Socket playerOneSocket = server.accept();
-//            WAMPlayer playerOne = new WAMPlayer(playerOneSocket);
-//            //playerOne.welcome();need to fix this
-//            System.out.println("Player one connected");
-//            System.out.println("Starting game !");
-//            //TODO: Create a WAMGame and start to run in a new thread
-//
-//
-//        } catch (IOException ie){
-//            System.err.println("Something bad has happened!!!");
-//            ie.printStackTrace();
-//        } catch (Exception e){
-//            System.err.println("Failed to create the player!");
-//            e.printStackTrace();
-//        }
+        while(numPlayers <= NUM_PLAYERS)
+        {
+            try
+            {
+                System.out.println("Waiting for player "+1+"...");
+                Socket playerSocket = server.accept();
+                WAMPlayer player = new WAMPlayer(playerSocket);
+                //playerOne.welcome();need to fix this
+                System.out.println("Player "+numPlayers+" connected");
+                System.out.println("Starting game !");
+                //TODO: Create a WAMGame and start to run in a new thread
 
+
+            } catch (IOException ie)
+            {
+                System.err.println("Something bad has happened!!!");
+                ie.printStackTrace();
+            } catch (Exception e)
+            {
+                System.err.println("Failed to create the player!");
+                e.printStackTrace();
+            }
+            numPlayers++;
+        }
     }
 }
