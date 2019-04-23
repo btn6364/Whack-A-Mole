@@ -27,6 +27,8 @@ public class WAMClient
     /** the tokens to store the value from the WELCOME message*/
     private String[] tokens;
 
+    private int rowMsg;
+    private int colMsg;
     /**
      * Accessor that takes multithreaded access into account
      *
@@ -60,7 +62,8 @@ public class WAMClient
             //Block waiting for the WELCOME message from the server
             String request = this.networkIn.nextLine();
             this.tokens = request.split("\\s");
-            WAMBoard.store(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]));
+            this.rowMsg = Integer.parseInt(tokens[1]);
+            this.colMsg = Integer.parseInt(tokens[2]);
             if (!tokens[0].equals(WAMProtocol.WELCOME)){
                 throw new Exception("Expected WELCOME message from the server");
             }
@@ -71,7 +74,9 @@ public class WAMClient
         }
     }
 
-
+    public void setBoard(WAMBoard board){
+        this.board = board;
+    }
     /**
      * Called from the GUI when it is ready to start receiving messages
      * from the server.
@@ -85,8 +90,7 @@ public class WAMClient
      * @return the row number from the welcome message
      */
     public int getRow(){
-        int row = Integer.parseInt(tokens[1]);
-        return row;
+        return rowMsg;
     }
 
     /**
@@ -94,8 +98,7 @@ public class WAMClient
      * @return the column number from the welcome message
      */
     public int getColumn(){
-        int col = Integer.parseInt(tokens[2]);
-        return col;
+        return colMsg;
     }
 
     /**
@@ -117,8 +120,8 @@ public class WAMClient
      */
     public void moleUp(String arguments){
         int moleNumber = Integer.parseInt(arguments);
-        int row = moleNumber / (this.getRow());
-        int col = moleNumber % (this.getColumn());
+        int row = moleNumber / rowMsg;
+        int col = moleNumber % colMsg;
         this.board.setContents(col, row, 1 );
         this.board.alertObservers();
     }
@@ -129,8 +132,8 @@ public class WAMClient
      */
     public void moleDown(String arguments){
         int moleNumber = Integer.parseInt(arguments);
-        int row = moleNumber / (this.getRow());
-        int col = moleNumber % (this.getColumn());
+        int row = moleNumber / rowMsg;
+        int col = moleNumber % colMsg;
         this.board.setContents(col, row, 0);
         this.board.alertObservers();
     }

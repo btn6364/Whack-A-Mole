@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class WAMBoard{
     /** the number of rows */
-    public int rows = 10;
+    public int rows;
 
     /** the number of columns */
-    public int cols = 10;
+    public int cols;
 
     /** the observers of this model */
     private List<Observer<WAMBoard>> observers;
@@ -22,7 +22,6 @@ public class WAMBoard{
     /** the board */
     private int[][] board;
 
-    private static int[] storage = new int[2];
 
     /**
      * The view calls this method to add themselves as an observer of the model.
@@ -40,23 +39,14 @@ public class WAMBoard{
         }
     }
 
-    /**
-     * Set the size of the game
-     */
-    public void setSize(){
-        this.rows = storage[0];
-        this.cols = storage[1];
-    }
 
-    public static void store(int rows, int cols){
-        storage[0] = rows;
-        storage[1] = cols;
-    }
 
     /**
      * Create a model for the game.
      */
-    public WAMBoard(){
+    public WAMBoard(int numRows, int numCols){
+        this.rows = numRows;
+        this.cols = numCols;
         this.observers = new LinkedList<>();
         this.board = new int[cols][rows];
         for(int col = 0; col < cols; col++){

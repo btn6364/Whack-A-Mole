@@ -49,6 +49,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
      */
     private Stage stage;
 
+
     @Override
     public void init() throws Exception
     {
@@ -57,12 +58,12 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             String host = args.get(0);
             int port = Integer.parseInt(args.get(1));
 
-            this.board = new WAMBoard();
+            this.board = new WAMBoard(10,10);
 
             this.board.addObserver(this);
 
-
             this.serverConn = new WAMClient(host, port, this.board);
+
         } catch (ArrayIndexOutOfBoundsException |
                 NumberFormatException e) {
             System.err.println(e);
@@ -83,15 +84,14 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             List<String> args = getParameters().getRaw();
 
             // get rows and cols from the server's WELCOME message
-            int COLS = serverConn.getColumn();
-            int ROWS = serverConn.getRow();
-
+            int COLMSG = serverConn.getColumn();
+            int ROWMSG = serverConn.getRow();
             GridPane gridPane = new GridPane();
-            buttons = new Button[COLS][ROWS];
+            buttons = new Button[COLMSG][ROWMSG];
 
 
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLS; col++) {
+            for (int row = 0; row < ROWMSG; row++) {
+                for (int col = 0; col < COLMSG; col++) {
                     Button button = new Button();
                     ImageView moleImageView = new ImageView(holeImage);
                     button.setGraphic(moleImageView);
@@ -102,8 +102,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
             Text time = new Text("TIME: ");
             Text score = new Text("SCORE: ");
-            gridPane.add(time, COLS-1, ROWS);
-            gridPane.add(score, 0, ROWS);
+            gridPane.add(time, COLMSG-1, ROWMSG);
+            gridPane.add(score, 0, ROWMSG);
 
 
 
