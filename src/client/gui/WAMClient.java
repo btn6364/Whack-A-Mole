@@ -51,19 +51,20 @@ public class WAMClient
      *              must be updated upon receiving server messages
      * @throws Exception If there is a problem opening the connection
      */
-    public WAMClient(String host, int port, WAMBoard board)
+    public WAMClient(String host, int port)
     {
         try {
             this.clientSocket = new Socket(host, port);
             this.networkIn = new Scanner(clientSocket.getInputStream());
             this.networkOut = new PrintStream(clientSocket.getOutputStream());
-            this.board = board;
             this.go = true;
             //Block waiting for the WELCOME message from the server
             String request = this.networkIn.nextLine();
             this.tokens = request.split("\\s");
             this.rowMsg = Integer.parseInt(tokens[1]);
             this.colMsg = Integer.parseInt(tokens[2]);
+            this.board = new WAMBoard(rowMsg, colMsg);
+
             if (!tokens[0].equals(WAMProtocol.WELCOME)){
                 throw new Exception("Expected WELCOME message from the server");
             }

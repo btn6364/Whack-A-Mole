@@ -58,11 +58,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             String host = args.get(0);
             int port = Integer.parseInt(args.get(1));
 
-            this.board = new WAMBoard(10,10);
+            this.serverConn = new WAMClient(host, port);
 
             this.board.addObserver(this);
-
-            this.serverConn = new WAMClient(host, port, this.board);
 
         } catch (ArrayIndexOutOfBoundsException |
                 NumberFormatException e) {
