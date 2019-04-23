@@ -75,6 +75,10 @@ public class WAMClient
         }
     }
 
+    public WAMBoard getBoard(){
+        return board;
+    }
+
     public void setBoard(WAMBoard board){
         this.board = board;
     }
