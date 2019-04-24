@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.Scanner;
 import static common.WAMProtocol.*;
 
-public class WAMPlayer implements Closeable {
+public class WAMPlayer implements Closeable, Runnable {
 
     private Socket sock;
 
@@ -60,6 +60,10 @@ public class WAMPlayer implements Closeable {
     public void errorDisplay(String message){
         printer.println(ERROR + " " + message);
         printer.flush();
+    }
+
+    public void run(){
+
     }
 
     /**

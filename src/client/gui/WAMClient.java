@@ -125,7 +125,7 @@ public class WAMClient
      */
     public void moleUp(String arguments){
         int moleNumber = Integer.parseInt(arguments);
-        int row = moleNumber / rowMsg;
+        int row = moleNumber / colMsg;
         int col = moleNumber % colMsg;
         this.board.setContents(col, row, 1 );
         this.board.alertObservers();
@@ -137,10 +137,15 @@ public class WAMClient
      */
     public void moleDown(String arguments){
         int moleNumber = Integer.parseInt(arguments);
-        int row = moleNumber / rowMsg;
+        int row = moleNumber / colMsg;
         int col = moleNumber % colMsg;
         this.board.setContents(col, row, 0);
         this.board.alertObservers();
+    }
+
+    public void whack(int id)
+    {
+        networkOut.println(WAMProtocol.WHACK +" "+ id);
     }
 
     /**

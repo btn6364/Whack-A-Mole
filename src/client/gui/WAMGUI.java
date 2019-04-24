@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import server.WAMGame;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
      * the stage of game
      */
     private Stage stage;
+
 
 
     @Override
@@ -97,6 +99,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                     button.setGraphic(moleImageView);
                     buttons[col][row] = button;
                     gridPane.add(button, col, row);
+                    int id = row * COLMSG + col;
+                    button.setOnAction(event -> serverConn.whack(id));
                 }
             }
 

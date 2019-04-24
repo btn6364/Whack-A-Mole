@@ -24,6 +24,8 @@ public class WAMServer implements Runnable
 
     private String[] args;
 
+    private int time;
+
     /**
      * Creates a new WAMServer that listens for incoming connections on a
      * specified port
@@ -31,14 +33,15 @@ public class WAMServer implements Runnable
      * @param port The port on which the server listens for a connection
      * @throws Exception If there is an error creating the ServerSocket
      */
-    public WAMServer(int port) throws Exception
+    public WAMServer(String[] args) throws Exception
     {
-        this.server = new ServerSocket(port);
+        this.server = new ServerSocket(Integer.parseInt(args[0]));
         String argsString = System.getProperties().toString();
         this.args = argsString.split(" ");
         this.COLUMNS = Integer.parseInt(args[2]);
         this.ROWS = Integer.parseInt(args[1]);
         this.NUM_PLAYERS = Integer.parseInt(args[3]);
+        this.time = Integer.parseInt(args[4]);
     }
 
 
@@ -49,9 +52,7 @@ public class WAMServer implements Runnable
             System.out.println("Usage: port#  #rows  #columns  #players  game-duration-seconds");
             System.exit(-1);
         }
-
-        int port = Integer.parseInt(args[0]);
-        WAMServer wamServer = new WAMServer(port);
+        WAMServer wamServer = new WAMServer(args);
         wamServer.run();
     }
 
@@ -70,20 +71,18 @@ public class WAMServer implements Runnable
     public void run()
     {
         int numPlayers = 1;
+        WAMPlayer[] players = new WAMPlayer[NUM_PLAYERS];
         //TODO after WAMPlayer is created
         while(numPlayers <= NUM_PLAYERS)
         {
             try
             {
-                System.out.println("Waiting for player "+1+"...");
+                System.out.println("Waiting for player "+numPlayers+"...");
                 Socket playerSocket = server.accept();
                 WAMPlayer player = new WAMPlayer(playerSocket);
-                //playerOne.welcome();need to fix this
+                players[numPlayers-1] = player;
+                player.welcome(ROWS, COLUMNS, NUM_PLAYERS, numPlayers);
                 System.out.println("Player "+numPlayers+" connected");
-                System.out.println("Starting game !");
-                //TODO: Create a WAMGame and start to run in a new thread
-
-
             } catch (IOException ie)
             {
                 System.err.println("Something bad has happened!!!");
@@ -95,5 +94,9 @@ public class WAMServer implements Runnable
             }
             numPlayers++;
         }
+        System.out.println("Starting game !");
+        //TODO: Create a WAMGame and start to run in a new thread
+
+
     }
 }
