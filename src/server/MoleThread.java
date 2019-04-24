@@ -29,7 +29,9 @@ public class MoleThread implements Runnable
     public void run(){
         while(true)
         {
-            int randomUp = randomUp();
+            int randUp = randomUp();
+            int randDown = randomDown();
+
         }
     }
 
@@ -38,11 +40,12 @@ public class MoleThread implements Runnable
     }
 
     public void setDown(){
+        //TODO need to actually set mole to down in the game/board
         this.up = false;
-
     }
 
     public void setUp(){
+        //TODO need to actually set the mole to up in the game/board
         this.up = true;
     }
 }
