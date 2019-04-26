@@ -33,8 +33,6 @@ public class WAMServer implements Runnable
     public WAMServer(String[] args) throws Exception
     {
         this.server = new ServerSocket(Integer.parseInt(args[0]));
-        String argsString = System.getProperties().toString();
-        this.args = argsString.split(" ");
         this.COLUMNS = Integer.parseInt(args[2]);
         this.ROWS = Integer.parseInt(args[1]);
         this.NUM_PLAYERS = Integer.parseInt(args[3]);
