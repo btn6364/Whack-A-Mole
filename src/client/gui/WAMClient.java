@@ -61,13 +61,12 @@ public class WAMClient
             //Block waiting for the WELCOME message from the server
             String request = this.networkIn.nextLine();
             this.tokens = request.split("\\s");
-            this.rowMsg = Integer.parseInt(tokens[1]);
-            this.colMsg = Integer.parseInt(tokens[2]);
-            this.board = new WAMBoard(rowMsg, colMsg);
-
             if (!tokens[0].equals(WAMProtocol.WELCOME)){
                 throw new Exception("Expected WELCOME message from the server");
             }
+            this.rowMsg = Integer.parseInt(tokens[1]);
+            this.colMsg = Integer.parseInt(tokens[2]);
+            this.board = new WAMBoard(rowMsg, colMsg);
             System.out.println("Connected to server " + this.clientSocket );
 
         } catch (Exception e){
