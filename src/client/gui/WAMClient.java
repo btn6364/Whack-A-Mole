@@ -79,9 +79,6 @@ public class WAMClient
         return board;
     }
 
-    public void setBoard(WAMBoard board){
-        this.board = board;
-    }
     /**
      * Called from the GUI when it is ready to start receiving messages
      * from the server.

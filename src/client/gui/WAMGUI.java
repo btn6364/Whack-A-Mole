@@ -66,6 +66,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
 
             this.board.addObserver(this);
 
+
         } catch (ArrayIndexOutOfBoundsException |
                 NumberFormatException e) {
             System.err.println(e);

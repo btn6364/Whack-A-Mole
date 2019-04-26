@@ -7,7 +7,10 @@ import java.net.Socket;
 import java.util.Scanner;
 import static common.WAMProtocol.*;
 
-public class WAMPlayer implements Closeable, Runnable {
+/**
+ * A class that manages the requests and responses to a single client.
+ */
+public class WAMPlayer implements Closeable {
 
     private Socket sock;
 
@@ -19,51 +22,40 @@ public class WAMPlayer implements Closeable, Runnable {
         this.sock = sock;
         try {
             scanner = new Scanner(sock.getInputStream());
-            printer = new PrintWriter(sock.getOutputStream());
+            printer = new PrintWriter(sock.getOutputStream(),true);
         } catch (IOException e){
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
 
     public void welcome(int rows, int col, int numOfPlayers, int playerIndex){
         printer.println(WELCOME + " " + rows + " " + col + " " + numOfPlayers + " " + playerIndex);
-        printer.flush();
     }
 
 
     public void moleUp(int moleNumber){
-        printer.println(MOLE_UP + moleNumber);
-        printer.flush();
+        printer.println(MOLE_UP + " " + moleNumber);
     }
 
     public void moleDown(int moleNumber){
-        printer.println(MOLE_DOWN + moleNumber);
-        printer.flush();
+        printer.println(MOLE_DOWN + " " + moleNumber);
     }
 
     public void gameWon(){
         printer.println(GAME_WON);
-        printer.flush();
     }
 
     public void gameLost(){
         printer.println(GAME_LOST);
-        printer.flush();
     }
 
     public void gameTied(){
         printer.println(GAME_TIED);
-        printer.flush();
     }
 
-    public void errorDisplay(String message){
+    public void error(String message){
         printer.println(ERROR + " " + message);
-        printer.flush();
-    }
-
-    public void run(){
-
     }
 
     /**
