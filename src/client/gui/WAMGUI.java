@@ -105,9 +105,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
                 }
             }
 
-            Text time = new Text("TIME: ");
             Text score = new Text("SCORE: ");
-            gridPane.add(time, COLMSG-1, ROWMSG);
             gridPane.add(score, 0, ROWMSG);
 
 
