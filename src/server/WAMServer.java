@@ -58,7 +58,6 @@ public class WAMServer implements Runnable
         ints[0] = COLUMNS;
         ints[1] = ROWS;
         return ints;
-
     }
 
 
