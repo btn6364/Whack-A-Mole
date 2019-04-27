@@ -29,8 +29,7 @@ public class WAMServer implements Runnable
      *
      * @throws Exception If there is an error creating the ServerSocket
      */
-    public WAMServer(String[] args) throws Exception
-    {
+    public WAMServer(String[] args) throws Exception {
         this.server = new ServerSocket(Integer.parseInt(args[0]));
         this.rows = Integer.parseInt(args[1]);
         this.columns = Integer.parseInt(args[2]);
@@ -39,8 +38,7 @@ public class WAMServer implements Runnable
     }
 
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         if (args.length != 5)
         {
             System.out.println("Usage: port#  #rows  #columns  #players  game-duration-seconds");
@@ -50,8 +48,7 @@ public class WAMServer implements Runnable
         wamServer.run();
     }
 
-    public int[] welcomeMessage()
-    {
+    public int[] welcomeMessage() {
     //TODO for sending info to the client and GUI
         int[] ints = new int[2];
         ints[0] = rows;

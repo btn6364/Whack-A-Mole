@@ -1,51 +1,74 @@
 package server;
 
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class WAM {
     private int rows;
     private int cols;
-    private Case[][] board;
-
-    public enum Case{
-        UP('O'),
-        DOWN('X');
-
-        private char symbol;
-        private Case (char symbol) {
-            this.symbol = symbol;
-        }
-
-        public char getSymbol(){
-            return symbol;
-        }
-    }
+    private int timeInSeconds;
+    private int[][] board;
+    private static final int UP = 1;
+    private static final int DOWN = 0;
+    private boolean canRandomize;
 
 
-    public WAM(int rows, int cols){
+    public WAM(int rows, int cols, int timeInSeconds) {
         this.rows = rows;
         this.cols = cols;
+        this.timeInSeconds = timeInSeconds;
+        this.canRandomize = true;
 
-        board = new Case[cols][rows];
-        for (int col = 0; col < cols; col++){
-            for (int row = 0; row < rows; row++){
-                board[col][row] = Case.DOWN;
+        board = new int[rows][cols];
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                board[row][col] = DOWN;
             }
         }
     }
 
-    public void setUp(int moleNumber){
-        board[moleNumber/cols][moleNumber%cols] = Case.UP;
+    public void setUp(int moleNumber) {
+        board[moleNumber / cols][moleNumber % cols] = UP;
     }
 
 
-    public void setDown(int moleNumber){
-        board[moleNumber/cols][moleNumber%cols] = Case.DOWN;
+    public void setDown(int moleNumber) {
+        board[moleNumber / cols][moleNumber % cols] = DOWN;
     }
 
-    public boolean isUp(int moleNumber)
-    {
-        return (board[moleNumber / cols][moleNumber % cols].equals(Case.UP));
+    public boolean isUp(int moleNumber) {
+        return (board[moleNumber / cols][moleNumber % cols] == UP);
     }
 
+    public int randomize() {
+        //System.out.println("If called");
+        if (!canRandomize) {
+            //System.out.println("CANNOT randomize");
+            return -1;
+        }
 
+        Random random = new Random();
+        int moleNumber = random.nextInt(rows*cols);
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                board[row][col] = DOWN;
+            }
+        }
+        setUp(moleNumber);
+
+        int delayInSec = random.nextInt(3) + 3; // from 3 to 5
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                canRandomize = true;
+                System.out.println("Can run!");
+            }
+        }, delayInSec * 1000);
+        canRandomize = false;
+
+        return moleNumber;
+    }
 
 }

@@ -47,8 +47,6 @@ public class WAMClient
      *
      * @param host  the name of the host running the server program
      * @param port  the port of the server socket on which the server is listening
-     * @param board the local object holding the state of the game that
-     *              must be updated upon receiving server messages
      * @throws Exception If there is a problem opening the connection
      */
     public WAMClient(String host, int port)
@@ -155,6 +153,9 @@ public class WAMClient
                 String request = this.networkIn.next();
                 String arguments = this.networkIn.nextLine().trim();
                 System.out.println("Network in message = \"" + request + '"');
+                if (arguments.length() > 0) {
+                    System.out.println("arguments = \"" + arguments + '"');
+                }
 
                 switch (request) {
                     case WAMProtocol.MOLE_UP:

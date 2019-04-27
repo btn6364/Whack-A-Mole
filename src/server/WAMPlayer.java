@@ -1,10 +1,9 @@
 package server;
 
-import common.WAMProtocol;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
+
 import static common.WAMProtocol.*;
 
 /**
@@ -18,67 +17,62 @@ public class WAMPlayer implements Closeable, Runnable {
     private PrintWriter printer;
     private int id;
 
-    public WAMPlayer(Socket sock, int id) throws Exception{
+    public WAMPlayer(Socket sock, int id) throws Exception {
         this.sock = sock;
         this.id = id;
         try {
             scanner = new Scanner(sock.getInputStream());
-            printer = new PrintWriter(sock.getOutputStream(),true);
-        } catch (IOException e){
+            printer = new PrintWriter(sock.getOutputStream(), true);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    public void welcome(int rows, int col, int numOfPlayers, int playerIndex){
+    public void welcome(int rows, int col, int numOfPlayers, int playerIndex) {
         printer.println(WELCOME + " " + rows + " " + col + " " + numOfPlayers + " " + playerIndex);
     }
 
 
-    public void moleUp(int moleNumber){
+    public void moleUp(int moleNumber) {
         printer.println(MOLE_UP + " " + moleNumber);
     }
 
-    public void moleDown(int moleNumber){
+    public void moleDown(int moleNumber) {
         printer.println(MOLE_DOWN + " " + moleNumber);
     }
 
-    public void gameWon(){
+    public void gameWon() {
         printer.println(GAME_WON);
     }
 
-    public void gameLost(){
+    public void gameLost() {
         printer.println(GAME_LOST);
     }
 
-    public void gameTied(){
+    public void gameTied() {
         printer.println(GAME_TIED);
     }
 
-    public void error(String message){
+    public void error(String message) {
         printer.println(ERROR + " " + message);
     }
 
     /**
-     *
      * @param moleNumber
      * @param playerNumber
      */
-    public void whack(int moleNumber, int playerNumber)
-    {
-        if(game.isUp(moleNumber))
-        {
+    public void whack(int moleNumber, int playerNumber) {
+        if (game.isUp(moleNumber)) {
             game.setDown(moleNumber);
             //TODO add 2 to score
-        }
-        else
-        {
+        } else {
             //TODO decrease score by 1
         }
     }
 
     @Override
-    public void close(){
+    public void close() {
         try {
             sock.close();
         } catch (IOException e) {
@@ -86,29 +80,23 @@ public class WAMPlayer implements Closeable, Runnable {
         }
     }
 
-    public void setGame(WAMGame game)
-    {
+    public void setGame(WAMGame game) {
         this.game = game;
     }
 
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             this.scanner = new Scanner(sock.getInputStream());
             this.printer = new PrintWriter(sock.getOutputStream(), true);
             String request = this.scanner.next();
             String[] argument = this.scanner.nextLine().trim().split(" ");
-            if(request.equals(WHACK))
-            {
+            if (request.equals(WHACK)) {
                 whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
             }
 
-        }
-        catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }

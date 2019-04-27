@@ -2,65 +2,56 @@ package server;
 
 import common.WAMProtocol;
 
-public class WAMGame implements Runnable{
+public class WAMGame implements Runnable {
     private WAMPlayer[] players;
-    private int time;
     private WAM wam;
-    private int cols;
-    private int rows;
-    private Thread[] threads;
+//    private Thread[] threads;
 
-    public WAMGame(WAMPlayer[] players, int cols, int rows, int time){
-        this.wam = new WAM(rows, cols);
+    public WAMGame(WAMPlayer[] players, int cols, int rows, int timeInSeconds) {
+        this.wam = new WAM(rows, cols, timeInSeconds);
         this.players = players;
-        this.threads = new Thread[players.length];
-        this.time = time;
-        this.cols = cols;
-        this.rows = rows;
+//        this.threads = new Thread[players.length];
     }
 
     @Override
-    public void run(){
+    public void run() {
         boolean go = true;
-        for(int i = 0; i < threads.length; i++)
-        {
-            threads[i] = new Thread(players[i]);
+//        for (int i = 0; i < threads.length; i++) {
+//            threads[i] = new Thread(players[i]);
+//        }
+        while (go) {
+            int randomMoleNumber = wam.randomize();
+            if (randomMoleNumber >= 0) {
+                for (WAMPlayer player : players) {
+                    player.moleUp(randomMoleNumber);
+                }
+            }
+            // check game.hasWon().....
         }
-        while(go)
-        {
-
-        }
-        for(WAMPlayer player:players)
-        {
+        for (WAMPlayer player : players) {
             player.close();
         }
     }
 
-    public boolean timeNotUp(int time)
-    {
+    public boolean timeNotUp(int time) {
         //TODO
         return false;
     }
 
-    public boolean isUp(int moleNumber)
-    {
+    public boolean isUp(int moleNumber) {
         return wam.isUp(moleNumber);
     }
 
-    public void setUp(int moleNumber)
-    {
+    public void setUp(int moleNumber) {
         wam.setUp(moleNumber);
-        for(WAMPlayer player:players)
-        {
+        for (WAMPlayer player : players) {
             player.moleUp(moleNumber);
         }
     }
 
-    public void setDown(int moleNumber)
-    {
+    public void setDown(int moleNumber) {
         wam.setDown(moleNumber);
-        for(WAMPlayer player:players)
-        {
+        for (WAMPlayer player : players) {
             player.moleDown(moleNumber);
         }
     }
