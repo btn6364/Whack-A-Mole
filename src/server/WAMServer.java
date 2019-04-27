@@ -88,7 +88,6 @@ public class WAMServer implements Runnable
             numPlayersInGame++;
         }
         System.out.println("Starting game !");
-        //TODO: Create a WAMGame and start to run in a new thread
         WAMGame game = new WAMGame(players, COLUMNS, ROWS, TIME);
         new Thread(game).run();
     }

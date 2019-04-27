@@ -1,8 +1,6 @@
 package server;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 import static common.WAMProtocol.*;
@@ -10,12 +8,11 @@ import static common.WAMProtocol.*;
 /**
  * A class that manages the requests and responses to a single client.
  */
-public class WAMPlayer implements Closeable {
+public class WAMPlayer implements Closeable, Runnable {
 
     private Socket sock;
 
     private Scanner scanner;
-
     private PrintWriter printer;
 
     public WAMPlayer(Socket sock) throws Exception{
@@ -75,6 +72,19 @@ public class WAMPlayer implements Closeable {
         }
     }
 
+    @Override
+    public void run()
+    {
+        try
+        {
+            this.scanner = new Scanner(sock.getInputStream());
+            this.printer = new PrintWriter(sock.getOutputStream(), true);
+            String request = this.scanner.nextLine();
 
-
+        }
+        catch (IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
+    }
 }
