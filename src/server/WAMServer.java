@@ -54,8 +54,8 @@ public class WAMServer implements Runnable
     {
     //TODO for sending info to the client and GUI
         int[] ints = new int[2];
-        ints[0] = COLUMNS;
-        ints[1] = ROWS;
+        ints[0] = ROWS;
+        ints[1] = COLUMNS;
         return ints;
     }
 

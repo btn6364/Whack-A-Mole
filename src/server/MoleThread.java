@@ -11,9 +11,9 @@ public class MoleThread implements Runnable
     boolean up;
     WAMGame game;
 
-    public MoleThread()
-    {
+    public MoleThread(int id) {
         //todo make id and stuff
+        this.id = id;
     }
 
     public int randomDown() {
