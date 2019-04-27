@@ -4,19 +4,19 @@ import common.WAMProtocol;
 
 public class WAMGame implements Runnable{
     private WAMPlayer[] players;
-    private int TIME;
+    private int time;
     private WAM wam;
-    private int COLS;
-    private int ROWS;
+    private int cols;
+    private int rows;
     private Thread[] threads;
 
     public WAMGame(WAMPlayer[] players, int cols, int rows, int time){
         this.wam = new WAM(rows, cols);
         this.players = players;
         this.threads = new Thread[players.length];
-        this.TIME = time;
-        this.COLS = cols;
-        this.ROWS = rows;
+        this.time = time;
+        this.cols = cols;
+        this.rows = rows;
     }
 
     @Override

@@ -47,10 +47,5 @@ public class WAM {
     }
 
 
-    public void main(String[] args){
-
-
-
-    }
 
 }
