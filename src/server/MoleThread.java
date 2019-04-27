@@ -11,6 +11,11 @@ public class MoleThread implements Runnable
     boolean up;
     WAMGame game;
 
+    public MoleThread()
+    {
+        //todo make id and stuff
+    }
+
     public int randomDown() {
         Random r = new Random();
         int low = 5;
@@ -42,6 +47,7 @@ public class MoleThread implements Runnable
     public void setDown(){
         //TODO need to actually set mole to down in the game/board
         this.up = false;
+        game.setUp(this.id);
     }
 
     public void setUp(){

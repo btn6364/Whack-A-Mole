@@ -1,5 +1,7 @@
 package server;
 
+import common.WAMProtocol;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -11,12 +13,14 @@ import static common.WAMProtocol.*;
 public class WAMPlayer implements Closeable, Runnable {
 
     private Socket sock;
-
+    private WAMGame game;
     private Scanner scanner;
     private PrintWriter printer;
+    private int id;
 
-    public WAMPlayer(Socket sock) throws Exception{
+    public WAMPlayer(Socket sock, int id) throws Exception{
         this.sock = sock;
+        this.id = id;
         try {
             scanner = new Scanner(sock.getInputStream());
             printer = new PrintWriter(sock.getOutputStream(),true);
@@ -60,9 +64,19 @@ public class WAMPlayer implements Closeable, Runnable {
      * @param moleNumber
      * @param playerNumber
      */
-    public void whack(int moleNumber, int playerNumber) {
-
+    public void whack(int moleNumber, int playerNumber)
+    {
+        if(game.isUp(moleNumber))
+        {
+            game.setDown(moleNumber);
+            //TODO add 2 to score
+        }
+        else
+        {
+            //TODO decrease score by 1
+        }
     }
+
     @Override
     public void close(){
         try {
@@ -72,6 +86,12 @@ public class WAMPlayer implements Closeable, Runnable {
         }
     }
 
+    public void setGame(WAMGame game)
+    {
+        this.game = game;
+    }
+
+
     @Override
     public void run()
     {
@@ -79,7 +99,12 @@ public class WAMPlayer implements Closeable, Runnable {
         {
             this.scanner = new Scanner(sock.getInputStream());
             this.printer = new PrintWriter(sock.getOutputStream(), true);
-            String request = this.scanner.nextLine();
+            String request = this.scanner.next();
+            String[] argument = this.scanner.nextLine().trim().split(" ");
+            if(request.equals(WHACK))
+            {
+                whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
+            }
 
         }
         catch (IOException ioe)

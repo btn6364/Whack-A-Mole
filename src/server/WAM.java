@@ -32,13 +32,20 @@ public class WAM {
         }
     }
 
-    public void Up(){
-        for (int col = 0; col < cols; col++){
-            for (int row = 0; row < rows; row++) {
-
-            }
-        }
+    public void setUp(int moleNumber){
+        board[moleNumber/cols][moleNumber%cols] = Case.UP;
     }
+
+
+    public void setDown(int moleNumber){
+        board[moleNumber/cols][moleNumber%cols] = Case.DOWN;
+    }
+
+    public boolean isUp(int moleNumber)
+    {
+        return (board[moleNumber / cols][moleNumber % cols].equals(Case.UP));
+    }
+
 
     public void main(String[] args){
 

@@ -27,7 +27,6 @@ public class WAMServer implements Runnable
      * Creates a new WAMServer that listens for incoming connections on a
      * specified port
      *
-     * @param port The port on which the server listens for a connection
      * @throws Exception If there is an error creating the ServerSocket
      */
     public WAMServer(String[] args) throws Exception
@@ -72,7 +71,7 @@ public class WAMServer implements Runnable
             {
                 System.out.println("Waiting for player "+numPlayersInGame+"...");
                 Socket playerSocket = server.accept();
-                WAMPlayer player = new WAMPlayer(playerSocket);
+                WAMPlayer player = new WAMPlayer(playerSocket, numPlayersInGame-1);
                 players[numPlayersInGame-1] = player;
                 player.welcome(ROWS, COLUMNS, NUM_PLAYERS, numPlayersInGame);
                 System.out.println("Player "+numPlayersInGame+" connected");
@@ -87,8 +86,12 @@ public class WAMServer implements Runnable
             }
             numPlayersInGame++;
         }
-        System.out.println("Starting game !");
+        System.out.println("Starting game!");
         WAMGame game = new WAMGame(players, COLUMNS, ROWS, TIME);
+        for (WAMPlayer player:players)
+        {
+            player.setGame(game);
+        }
         new Thread(game).run();
     }
 }
