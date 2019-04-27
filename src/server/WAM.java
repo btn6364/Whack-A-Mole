@@ -42,9 +42,8 @@ public class WAM {
     }
 
     public int randomize() {
-        //System.out.println("If called");
         if (!canRandomize) {
-            //System.out.println("CANNOT randomize");
+            System.out.println("CANNOT randomize");
             return -1;
         }
 
@@ -63,7 +62,6 @@ public class WAM {
             @Override
             public void run() {
                 canRandomize = true;
-                System.out.println("Can run!");
             }
         }, delayInSec * 1000);
         canRandomize = false;

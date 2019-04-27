@@ -5,12 +5,12 @@ import common.WAMProtocol;
 public class WAMGame implements Runnable {
     private WAMPlayer[] players;
     private WAM wam;
-//    private Thread[] threads;
+//    private Thread[] threads; not necessary
 
     public WAMGame(WAMPlayer[] players, int cols, int rows, int timeInSeconds) {
         this.wam = new WAM(rows, cols, timeInSeconds);
         this.players = players;
-//        this.threads = new Thread[players.length];
+//        this.threads = new Thread[players.length]; not necessary
     }
 
     @Override
@@ -18,7 +18,7 @@ public class WAMGame implements Runnable {
         boolean go = true;
 //        for (int i = 0; i < threads.length; i++) {
 //            threads[i] = new Thread(players[i]);
-//        }
+//        } not necessary since created the object without running it.
         while (go) {
             int randomMoleNumber = wam.randomize();
             if (randomMoleNumber >= 0) {
