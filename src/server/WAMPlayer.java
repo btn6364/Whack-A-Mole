@@ -16,10 +16,12 @@ public class WAMPlayer implements Closeable, Runnable {
     private Scanner scanner;
     private PrintWriter printer;
     private int id;
+    private int scorePoint;
 
     public WAMPlayer(Socket sock, int id) throws Exception {
         this.sock = sock;
         this.id = id;
+        this.scorePoint = 0;
         try {
             scanner = new Scanner(sock.getInputStream());
             printer = new PrintWriter(sock.getOutputStream(), true);
@@ -59,18 +61,43 @@ public class WAMPlayer implements Closeable, Runnable {
     }
 
     /**
-     * @param moleNumber
-     * @param playerNumber
+     * @param moleNum
+     * @param playerNum
      */
-    public void whack(int moleNumber, int playerNumber) {
-        if (game.isUp(moleNumber)) {
-            game.setDown(moleNumber);
-            //TODO add 2 to score
+    public void whack(int moleNum, int playerNum) throws Exception {
+//        if (game.isUp(moleNumber)) {
+//            game.setDown(moleNumber);
+//            //TODO add 2 to score
+//        } else {
+//            //TODO decrease score by 1
+//        }
+        String response = scanner.nextLine();
+        if (response.startsWith(WHACK)){
+            String[] tokens = response.split(" ");
+            if (tokens.length == 3){
+                //TODO
+                int moleNumber = Integer.parseInt(tokens[1]);
+                int playerNumber = Integer.parseInt(tokens[2]);
+                if (game.isUp(moleNumber)){
+                    game.setDown(moleNumber);
+                    this.scorePoint += 2;
+                } else {
+                    System.out.println("Miss!");
+                    this.scorePoint --;
+                }
+
+            } else {
+                throw new Exception("Invalid player response: " + response);
+            }
         } else {
-            //TODO decrease score by 1
+            throw new Exception("Invalid player response: " + response);
         }
     }
 
+    public void score(WAMPlayer[] players){
+        //TODO
+
+    }
     @Override
     public void close() {
         try {
@@ -86,14 +113,14 @@ public class WAMPlayer implements Closeable, Runnable {
 
 
     @Override
-    public void run() {
+    public void run() {//?
         try {
             this.scanner = new Scanner(sock.getInputStream());
             this.printer = new PrintWriter(sock.getOutputStream(), true);
             String request = this.scanner.next();
             String[] argument = this.scanner.nextLine().trim().split(" ");
             if (request.equals(WHACK)) {
-                whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
+                //whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
             }
 
         } catch (IOException ioe) {
