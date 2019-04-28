@@ -26,7 +26,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     private Image holeImage = new Image(getClass().getResourceAsStream("holeimage.png"));
 
     /**
-     * a mole image.
+     * a MoleThread image.
      */
     private Image moleImage = new Image(getClass().getResourceAsStream("moleimage.png"));
 

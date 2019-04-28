@@ -114,8 +114,8 @@ public class WAMClient
     }
 
     /**
-     * A mole is going up
-     * @param arguments the mole number in String type
+     * A MoleThread is going up
+     * @param arguments the MoleThread number in String type
      */
     public void moleUp(String arguments){
         int moleNumber = Integer.parseInt(arguments);
@@ -126,8 +126,8 @@ public class WAMClient
     }
 
     /**
-     * A mole is going down
-     * @param arguments the mole number in String type
+     * A MoleThread is going down
+     * @param arguments the MoleThread number in String type
      */
     public void moleDown(String arguments){
         int moleNumber = Integer.parseInt(arguments);

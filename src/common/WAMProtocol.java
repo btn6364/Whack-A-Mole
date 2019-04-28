@@ -15,9 +15,9 @@ package common;
  * space of any kind at the start and end of the messages.
  *
  * Note that dimensions of the board are given as number of rows and number
- * of columns. However, mole positions are numbered serially, in row-major
+ * of columns. However, MoleThread positions are numbered serially, in row-major
  * order, starting with zero. This has been done to allow for more irregularly
- * placed mole-holes in future versions of the game.
+ * placed MoleThread-holes in future versions of the game.
  *
  * @author RIT CS
  */
@@ -36,25 +36,25 @@ public interface WAMProtocol {
     public static final String WELCOME = "WELCOME";
 
     /**
-     * From server: inform client that a mole has popped up.<br>
-     *     One argument: the mole number
+     * From server: inform client that a MoleThread has popped up.<br>
+     *     One argument: the MoleThread number
      */
     public static final String MOLE_UP = "MOLE_UP";
 
     /**
-     * From server: inform client that a mole has dropped down.
+     * From server: inform client that a MoleThread has dropped down.
      * This message is sent even if it was whacked or if the game server
      * has pulled it down.<br>
-     *     One argument: the mole number
+     *     One argument: the MoleThread number
      */
     public static final String MOLE_DOWN = "MOLE_DOWN";
 
     /**
-     * From client: inform server that it has whacked a mole.
-     * (Game server must then decide if a mole was really up at that
+     * From client: inform server that it has whacked a MoleThread.
+     * (Game server must then decide if a MoleThread was really up at that
      * location. Only then would points be awarded. If it is a miss,
      * points may be subtracted.<br>
-     *     Arguments: the mole number, the player number
+     *     Arguments: the MoleThread number, the player number
      */
     public static final String WHACK = "WHACK";
 

@@ -11,14 +11,14 @@ public class WAM {
     private int[][] board;
     private static final int UP = 1;
     private static final int DOWN = 0;
-    private volatile boolean canRandomizeUp;
+    private volatile boolean canRandomize;
 
 
     public WAM(int rows, int cols, int timeInSeconds) {
         this.rows = rows;
         this.cols = cols;
         this.timeInSeconds = timeInSeconds;
-        this.canRandomizeUp = true;
+        this.canRandomize = true;
         board = new int[rows][cols];
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -53,9 +53,8 @@ public class WAM {
 
         return false;
     }
-    public int randomizeUp() {
-        if (!canRandomizeUp) {
-//            System.out.println();
+    public int randomize() {
+        if (!canRandomize) {
             return -1;
         }
 
@@ -69,20 +68,17 @@ public class WAM {
         setUp(moleNumber);
 
         int delayInSec = random.nextInt(3) + 3; // from 3 to 5
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                canRandomizeUp = true;
+                canRandomize = true;
 
             }
         }, delayInSec * 1000);
-        canRandomizeUp = false;
+        canRandomize = false;
 
         return moleNumber;
     }
-
-
-
-
 }
