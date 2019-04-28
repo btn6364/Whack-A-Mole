@@ -3,13 +3,13 @@ package client.gui;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import server.WAMGame;
 
 import java.util.List;
 
@@ -104,8 +104,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         }
 
         Text score = new Text("SCORE: " + String.valueOf(this.serverConn.getMyScore()));
-//        int myScore = this.serverConn.getMyScore();
-//        score.setText("SCORE: " + String.valueOf(myScore));
         gridPane.add(score, 0, rowmsg);
 
 
@@ -116,8 +114,6 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         stage.show();
 
         this.serverConn.startListener();
-
-
     }
 
     /**
@@ -142,15 +138,45 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
                 gridPane.add(buttons[c][r], c, r);
             }
         }
-        //TODO need to get scoring and time remaining and add here
 
-        gridPane.add(new Text("TIME: "), serverConn.getColumn() - 1, serverConn.getRow()); //add time
         gridPane.add(new Text("SCORE: " + this.serverConn.getMyScore()), 0, serverConn.getRow()); //add score
         Scene scene = new Scene(gridPane);
         stage.setScene(scene);
         stage.show();
         stage.setAlwaysOnTop(true);
         stage.setAlwaysOnTop(false);
+
+        int result = serverConn.getGameResult();
+        switch (result){
+            case WAMClient.RESULT_WON:
+                showDialog("You won! Yay!");
+                break;
+            case WAMClient.RESULT_LOST:
+                showDialog("You lost! Boo!");
+                break;
+            case WAMClient.RESULT_TIED:
+                showDialog("It's a tie! Good try!");
+                break;
+            case WAMClient.RESULT_ERROR:
+                showError("ERROR!!!!!");
+                break;
+        }
+    }
+
+    private void showDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over!");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Game Over!");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**

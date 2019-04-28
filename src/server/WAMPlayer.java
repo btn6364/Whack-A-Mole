@@ -30,7 +30,7 @@ public class WAMPlayer implements Closeable, Runnable {
         }
     }
 
-    public Scanner getScanner(){
+    public Scanner getScanner() {
         return this.scanner;
     }
 
@@ -73,7 +73,6 @@ public class WAMPlayer implements Closeable, Runnable {
         } else {
             this.scorePoint--;
         }
-        System.out.println("Current score:" + this.scorePoint);
     }
 
     public void sendScore(WAMPlayer[] players) {
@@ -82,9 +81,13 @@ public class WAMPlayer implements Closeable, Runnable {
         for (WAMPlayer player : players) {
             message += " " + player.scorePoint;
         }
-        for (WAMPlayer player : players){
+        for (WAMPlayer player : players) {
             printer.println(message);
         }
+    }
+
+    public int getScorePoint() {
+        return scorePoint;
     }
 
     @Override
@@ -102,15 +105,18 @@ public class WAMPlayer implements Closeable, Runnable {
 
     @Override
     public void run() {
-        boolean check = true;
-        while (check) {
-            String request = this.scanner.next();
-            String[] arguments = this.scanner.nextLine().trim().split("\\s+");
-            if (request.equals(WHACK)) {
-                int moleNumber = Integer.parseInt(arguments[0]);
-                int playerNumber = Integer.parseInt(arguments[1]);
-                whack(moleNumber, playerNumber);
-                sendScore(game.getPlayers());
+        while (!game.isGameEnded()) {
+            try {
+                String request = this.scanner.next();
+                String[] arguments = this.scanner.nextLine().trim().split("\\s+");
+                if (request.equals(WHACK)) {
+                    int moleNumber = Integer.parseInt(arguments[0]);
+                    int playerNumber = Integer.parseInt(arguments[1]);
+                    whack(moleNumber, playerNumber);
+                    sendScore(game.getPlayers());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

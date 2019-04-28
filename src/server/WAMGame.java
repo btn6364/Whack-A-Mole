@@ -10,6 +10,7 @@ public class WAMGame implements Runnable {
     private int time;
     private int row;
     private int col;
+    private volatile boolean gameEnded = false;
 
     public WAMGame(WAMPlayer[] players, int cols, int rows, int timeInSeconds) {
         this.wam = new WAM(rows, cols, timeInSeconds);
@@ -19,13 +20,16 @@ public class WAMGame implements Runnable {
         this.col = cols;
     }
 
-    public WAMPlayer[] getPlayers(){
+    public WAMPlayer[] getPlayers() {
         return players;
+    }
+
+    public boolean isGameEnded() {
+        return gameEnded;
     }
 
     @Override
     public void run() {
-        System.out.println("start game");
         for (WAMPlayer player : players) {
             Thread thread = new Thread(player);
             thread.start();
@@ -38,6 +42,54 @@ public class WAMGame implements Runnable {
             Thread thread = new Thread(moleThread);
             thread.start();
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(time * 1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                gameEnded = true;
+                // end game
+                if (players.length == 1){
+                    players[0].gameWon();
+                    return;
+                }
+                ArrayList<Integer> scoreStorage = new ArrayList<Integer>();
+                for (WAMPlayer player : players) {
+                    int playerScore = player.getScorePoint();
+                    scoreStorage.add(playerScore);
+                }
+                int max = 0;
+                int min = 100000000;
+                for (int idx = 0; idx < scoreStorage.size(); idx++) {
+                    if (scoreStorage.get(idx) > max) {
+                        max = scoreStorage.get(idx);
+                    }
+                    if (scoreStorage.get(idx) < min) {
+                        min = scoreStorage.get(idx);
+                    }
+                }
+
+                if (max == min) {
+                    for (WAMPlayer player : players) {
+                        player.gameTied();
+                    }
+                } else { //max > min
+                    for (int i = 0; i < scoreStorage.size(); i++) {
+                        if (scoreStorage.get(i) == max) {
+                            players[i].gameWon();
+                        }
+                        if (scoreStorage.get(i) == min) {
+                            players[i].gameLost();
+                        }
+                    }
+                }
+            }
+        }).start();
     }
 
 
@@ -86,17 +138,23 @@ public class WAMGame implements Runnable {
 
         @Override
         public synchronized void run() {
-            Long starting = System.currentTimeMillis() * 1000;
+            long starting = System.currentTimeMillis() * 1000;
             while (System.currentTimeMillis() - starting < time * 1000) {
+                if (gameEnded) {
+                    return;
+                }
                 try {
                     setDown(moleNum);
                     this.wait(randomDown() * 1000);
                     setUp(moleNum);
                     this.wait(randomUp() * 1000);
                 } catch (InterruptedException ie) {
-                    System.err.println("Error");
+                    for (WAMPlayer player: players){
+                        player.error(ie.getMessage());
+                    }
                 }
             }
+
         }
     }
 

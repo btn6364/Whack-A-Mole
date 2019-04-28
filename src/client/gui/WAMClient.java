@@ -44,7 +44,13 @@ public class WAMClient {
     private int numberOfPlayers;
     private int playerNumber;
     private int myScore;
+    private int gameResult;
 
+    protected static final int RESULT_ONGOING = 0;
+    protected static final int RESULT_WON = 1;
+    protected static final int RESULT_LOST = 2;
+    protected static final int RESULT_TIED = 3;
+    protected static final int RESULT_ERROR = 4;
     /**
      * Accessor that takes multithreaded access into account
      *
@@ -96,6 +102,10 @@ public class WAMClient {
 
     public WAMBoard getBoard() {
         return board;
+    }
+
+    public int getGameResult(){
+        return gameResult;
     }
 
     /**
@@ -177,9 +187,11 @@ public class WAMClient {
         return myScore;
     }
 
-    public void setMyScore(int myScore){
-        this.myScore = myScore;
+    public void updateResult(int result) {
+        this.gameResult = result;
+        this.board.alertObservers();
     }
+
     /**
      * Run the main client loop. Intended to be started as a separate
      * thread internally. This method is made private so that no one
@@ -207,16 +219,21 @@ public class WAMClient {
                         updateScore(arguments);
                         break;
                     case WAMProtocol.GAME_WON:
-                        //TODO
+                        updateResult(RESULT_WON);
+                        this.stop();
                         break;
                     case WAMProtocol.GAME_LOST:
-                        //TODO
+                        updateResult(RESULT_LOST);
+                        this.stop();
                         break;
                     case WAMProtocol.GAME_TIED:
-                        //TODO
+                        updateResult(RESULT_TIED);
+                        this.stop();
                         break;
                     case WAMProtocol.ERROR:
                         //TODO
+                        updateResult(RESULT_ERROR);
+                        this.stop();
                         break;
                 }
             } catch (Exception e) {

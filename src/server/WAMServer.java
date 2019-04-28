@@ -22,7 +22,7 @@ public class WAMServer implements Runnable
 
     private String[] args;
 
-    private int time;
+    private int gameTime;
 
     /**
      * Creates a new WAMServer that listens for incoming connections on a
@@ -35,7 +35,7 @@ public class WAMServer implements Runnable
         this.rows = Integer.parseInt(args[1]);
         this.columns = Integer.parseInt(args[2]);
         this.numPlayers = Integer.parseInt(args[3]);
-        this.time = Integer.parseInt(args[4]);
+        this.gameTime = Integer.parseInt(args[4]);
     }
 
 
@@ -73,7 +73,7 @@ public class WAMServer implements Runnable
             numPlayersInGame++;
         }
         System.out.println("Starting game!");
-        WAMGame game = new WAMGame(players, columns, rows, time);
+        WAMGame game = new WAMGame(players, columns, rows, gameTime);
         for (WAMPlayer player:players) {
             player.setGame(game);
         }
