@@ -8,40 +8,36 @@ public class WAMGame implements Runnable {
     private WAM wam;
     private ArrayList<MoleThread> moleThreads = new ArrayList<>();
     private int time;
+    private int row;
+    private int col;
 
     public WAMGame(WAMPlayer[] players, int cols, int rows, int timeInSeconds) {
         this.wam = new WAM(rows, cols, timeInSeconds);
         this.players = players;
         this.time = timeInSeconds;
+        this.row = rows;
+        this.col = cols;
     }
 
     @Override
     public void run() {
+        System.out.println("start game");
         for(WAMPlayer player:players)
         {
             Thread thread = new Thread(player);
-            thread.run();
+            thread.start();
         }
-        Long startingTime = System.currentTimeMillis();
-        int size = wam.getCols() * wam.getRows();
-        for(int i = 0; i < size; i++)
+        int size = row * col;
+        System.out.println(size);
+        for (int i = 0; i < size; i++)
         {
             MoleThread moleThread = new MoleThread(i);
             moleThreads.add(moleThread);
-        }
-        for(MoleThread m:moleThreads)
-        {
-            m.run();
-        }
-        while (System.currentTimeMillis() - startingTime < time * 1000) {
-            int randomMoleNumber = wam.randomize();
-
-            // check game.hasWon().....
-//
-//        for (WAMPlayer player : players) {
-//            player.close();
+            Thread thread = new Thread(moleThread);
+            thread.start();
         }
     }
+
 
 
     public boolean isUp(int moleNumber) {
@@ -85,21 +81,24 @@ public class WAMGame implements Runnable {
             this.moleNum = moleNum;
         }
 
+        public void close()
+        {this.close();}
+
         @Override
-        public void run()
+        public synchronized void run()
         {
-            while (true)
+            Long starting = System.currentTimeMillis()*1000;
+            while (System.currentTimeMillis() - starting < time*1000)
             {
                 try
                 {
+                    setDown(moleNum);
+                    this.wait(randomDown() * 1000);
                     setUp(moleNum);
                      this.wait(randomUp() * 1000);
-                    setDown(moleNum);
-                     this.wait(randomDown() * 1000);
-
-                } catch (Exception ie)
+                } catch (InterruptedException ie)
                 {
-                    System.err.println();
+                    System.err.println("Error");
                 }
             }
         }

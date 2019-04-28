@@ -27,6 +27,8 @@ public class WAM {
         }
     }
 
+
+
     public void setUp(int moleNumber) {
         board[moleNumber / cols][moleNumber % cols] = UP;
     }

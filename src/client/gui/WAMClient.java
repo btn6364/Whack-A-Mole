@@ -148,6 +148,7 @@ public class WAMClient
      * outside will call it or try to start a thread on it.
      */
     private void run() {
+        System.out.println("good?");
         while (this.isGo()) {
             try {
                 String request = this.networkIn.next();

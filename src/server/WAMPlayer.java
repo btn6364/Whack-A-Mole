@@ -33,15 +33,18 @@ public class WAMPlayer implements Closeable, Runnable {
 
     public void welcome(int rows, int col, int numOfPlayers, int playerIndex) {
         printer.println(WELCOME + " " + rows + " " + col + " " + numOfPlayers + " " + playerIndex);
+        printer.flush();
     }
 
 
     public void moleUp(int moleNumber) {
         printer.println(MOLE_UP + " " + moleNumber);
+        printer.flush();
     }
 
     public void moleDown(int moleNumber) {
         printer.println(MOLE_DOWN + " " + moleNumber);
+        printer.flush();
     }
 
     public void gameWon() {
@@ -115,16 +118,18 @@ public class WAMPlayer implements Closeable, Runnable {
     @Override
     public void run() {//?
         try {
-            this.scanner = new Scanner(sock.getInputStream());
-            this.printer = new PrintWriter(sock.getOutputStream(), true);
             String request = this.scanner.next();
             String[] argument = this.scanner.nextLine().trim().split(" ");
-            if (request.equals(WHACK)) {
-                //whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
+            while(true)
+            {
+                if (request.equals(WHACK))
+                {
+                    whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
+                }
             }
 
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

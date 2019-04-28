@@ -77,6 +77,12 @@ public class WAMServer implements Runnable
         for (WAMPlayer player:players) {
             player.setGame(game);
         }
-        new Thread(game).run();
+        System.out.println("run game");
+        Thread gameThread = new Thread(game);
+        gameThread.start();
+        try{
+            gameThread.join();
+        }
+        catch (Exception e){}
     }
 }
