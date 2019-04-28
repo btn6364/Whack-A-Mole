@@ -103,7 +103,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
             }
         }
 
-        Text score = new Text("SCORE: ");
+        Text score = new Text("SCORE: " + String.valueOf(this.serverConn.getMyScore()));
+//        int myScore = this.serverConn.getMyScore();
+//        score.setText("SCORE: " + String.valueOf(myScore));
         gridPane.add(score, 0, rowmsg);
 
 
@@ -141,8 +143,9 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
             }
         }
         //TODO need to get scoring and time remaining and add here
+
         gridPane.add(new Text("TIME: "), serverConn.getColumn() - 1, serverConn.getRow()); //add time
-        gridPane.add(new Text("SCORE: "), 0, serverConn.getRow()); //add score
+        gridPane.add(new Text("SCORE: " + this.serverConn.getMyScore()), 0, serverConn.getRow()); //add score
         Scene scene = new Scene(gridPane);
         stage.setScene(scene);
         stage.show();

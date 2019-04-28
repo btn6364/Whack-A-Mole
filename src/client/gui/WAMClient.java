@@ -43,6 +43,7 @@ public class WAMClient {
     private int colMsg;
     private int numberOfPlayers;
     private int playerNumber;
+    private int myScore;
 
     /**
      * Accessor that takes multithreaded access into account
@@ -74,6 +75,7 @@ public class WAMClient {
             this.networkIn = new Scanner(clientSocket.getInputStream());
             this.networkOut = new PrintStream(clientSocket.getOutputStream());
             this.go = true;
+            this.myScore = 0;
             //Block waiting for the WELCOME message from the server
             String request = this.networkIn.nextLine();
             this.tokens = request.split("\\s");
@@ -165,6 +167,19 @@ public class WAMClient {
         networkOut.println(WAMProtocol.WHACK + " " + moleNumber + " " + playerNumber);
     }
 
+    public void updateScore(String arguments){
+        String[] tokens = arguments.split("\\s+");
+        this.myScore = Integer.parseInt(tokens[this.playerNumber-1]);
+        this.board.alertObservers();
+    }
+
+    public int getMyScore(){
+        return myScore;
+    }
+
+    public void setMyScore(int myScore){
+        this.myScore = myScore;
+    }
     /**
      * Run the main client loop. Intended to be started as a separate
      * thread internally. This method is made private so that no one
@@ -189,7 +204,7 @@ public class WAMClient {
                         moleDown(arguments);
                         break;
                     case WAMProtocol.SCORE:
-                        //TODO
+                        updateScore(arguments);
                         break;
                     case WAMProtocol.GAME_WON:
                         //TODO

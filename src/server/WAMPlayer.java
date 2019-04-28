@@ -76,9 +76,15 @@ public class WAMPlayer implements Closeable, Runnable {
         System.out.println("Current score:" + this.scorePoint);
     }
 
-    public void score(WAMPlayer[] players) {
+    public void sendScore(WAMPlayer[] players) {
         //TODO
-
+        String message = SCORE;
+        for (WAMPlayer player : players) {
+            message += " " + player.scorePoint;
+        }
+        for (WAMPlayer player : players){
+            printer.println(message);
+        }
     }
 
     @Override
@@ -104,6 +110,7 @@ public class WAMPlayer implements Closeable, Runnable {
                 int moleNumber = Integer.parseInt(arguments[0]);
                 int playerNumber = Integer.parseInt(arguments[1]);
                 whack(moleNumber, playerNumber);
+                sendScore(game.getPlayers());
             }
         }
     }

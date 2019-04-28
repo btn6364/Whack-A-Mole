@@ -19,6 +19,10 @@ public class WAMGame implements Runnable {
         this.col = cols;
     }
 
+    public WAMPlayer[] getPlayers(){
+        return players;
+    }
+
     @Override
     public void run() {
         System.out.println("start game");
