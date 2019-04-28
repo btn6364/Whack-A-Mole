@@ -8,20 +8,20 @@ public class WAMGame implements Runnable {
     private WAM wam;
     private ArrayList<MoleThread> moleThreads = new ArrayList<>();
     private int time;
-//    private Thread[] threads; not necessary
 
     public WAMGame(WAMPlayer[] players, int cols, int rows, int timeInSeconds) {
         this.wam = new WAM(rows, cols, timeInSeconds);
         this.players = players;
         this.time = timeInSeconds;
-//        this.threads = new Thread[players.length]; not necessary
     }
 
     @Override
-    public synchronized void run() {
-//        for (int i = 0; i < threads.length; i++) {
-//            threads[i] = new Thread(players[i]);
-//        } not necessary since created the object without running it.
+    public void run() {
+        for(WAMPlayer player:players)
+        {
+            Thread thread = new Thread(player);
+            thread.run();
+        }
         Long startingTime = System.currentTimeMillis();
         int size = wam.getCols() * wam.getRows();
         for(int i = 0; i < size; i++)
@@ -43,10 +43,6 @@ public class WAMGame implements Runnable {
         }
     }
 
-    public boolean timeNotUp(int time) {
-        //TODO
-        return false;
-    }
 
     public boolean isUp(int moleNumber) {
         return wam.isUp(moleNumber);
@@ -97,10 +93,9 @@ public class WAMGame implements Runnable {
                 try
                 {
                     setUp(moleNum);
-
-                    // this.wait(randomUp() * 1000);
+                     this.wait(randomUp() * 1000);
                     setDown(moleNum);
-                    // this.wait(randomDown() * 1000);
+                     this.wait(randomDown() * 1000);
 
                 } catch (Exception ie)
                 {
