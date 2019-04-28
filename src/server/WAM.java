@@ -11,8 +11,7 @@ public class WAM {
     private int[][] board;
     private static final int UP = 1;
     private static final int DOWN = 0;
-    private boolean canRandomizeUp;
-    private boolean canRandomizeDown;
+    private volatile boolean canRandomizeUp;
 
 
     public WAM(int rows, int cols, int timeInSeconds) {
@@ -20,7 +19,6 @@ public class WAM {
         this.cols = cols;
         this.timeInSeconds = timeInSeconds;
         this.canRandomizeUp = true;
-        this.canRandomizeDown = true;
         board = new int[rows][cols];
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
@@ -42,9 +40,22 @@ public class WAM {
         return (board[moleNumber / cols][moleNumber % cols] == UP);
     }
 
+    public boolean hasWonGame(){
+        //TODO
+
+
+        return false;
+    }
+
+    public boolean hasTiedGame(){
+        //TODO
+
+
+        return false;
+    }
     public int randomizeUp() {
         if (!canRandomizeUp) {
-            System.out.println();
+//            System.out.println();
             return -1;
         }
 
@@ -63,6 +74,7 @@ public class WAM {
             @Override
             public void run() {
                 canRandomizeUp = true;
+
             }
         }, delayInSec * 1000);
         canRandomizeUp = false;
@@ -70,34 +82,6 @@ public class WAM {
         return moleNumber;
     }
 
-    public int randomizeDown(){
-        if (!canRandomizeDown){
-            System.out.println();
-            return -1;
-        }
-
-        Random random = new Random();
-        int moleNumber = random.nextInt(rows * cols);
-        for (int row = 0; row < rows; row++){
-            for (int col = 0; col < cols; col++){
-                board[row][col] = UP;
-            }
-        }
-        setDown(moleNumber);
-
-        int delayInSec = random.nextInt(9) + 2; // from 3 to 5
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                canRandomizeDown = true;
-            }
-        }, delayInSec * 1000);
-        canRandomizeDown = false;
-
-        return moleNumber;
-
-    }
 
 
 

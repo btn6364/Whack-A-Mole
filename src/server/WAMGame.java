@@ -20,12 +20,6 @@ public class WAMGame implements Runnable {
                 }
             }
 
-            int randomMoleNumberDown = wam.randomizeDown();
-            if (randomMoleNumberDown >= 0){
-                for (WAMPlayer player: players){
-                    player.moleDown(randomMoleNumberDown);
-                }
-            }
             // check game.hasWon().....
         }
         for (WAMPlayer player : players) {
