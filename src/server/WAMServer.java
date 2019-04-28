@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * @author Jared Sullivan (jms8376@rit.edu)
@@ -54,7 +55,6 @@ public class WAMServer implements Runnable
     public void run() {
         int numPlayersInGame = 1;
         WAMPlayer[] players = new WAMPlayer[numPlayers];
-
         while(numPlayersInGame <= numPlayers) {
             try {
                 System.out.println("Waiting for player "+numPlayersInGame+"...");
@@ -62,7 +62,7 @@ public class WAMServer implements Runnable
                 WAMPlayer player = new WAMPlayer(playerSocket, numPlayersInGame-1);
                 players[numPlayersInGame-1] = player;
                 player.welcome(rows, columns, numPlayers, numPlayersInGame);
-                System.out.println("Player "+numPlayersInGame+" connected");
+                System.out.println("Player " + numPlayersInGame + " connected");
             } catch (IOException ie) {
                 System.err.println("Something bad has happened!!!");
                 ie.printStackTrace();
@@ -77,12 +77,7 @@ public class WAMServer implements Runnable
         for (WAMPlayer player:players) {
             player.setGame(game);
         }
-        System.out.println("run game");
-        Thread gameThread = new Thread(game);
-        gameThread.start();
-        try{
-            gameThread.join();
-        }
-        catch (Exception e){}
+        new Thread(game).run();
+
     }
 }

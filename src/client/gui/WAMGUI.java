@@ -19,7 +19,7 @@ import java.util.List;
  * @author Jared Sullivan (jms8376@rit.edu)
  * @author Bao Nguyen (btn6364@rit.edu)
  */
-public class WAMGUI extends Application implements Observer<WAMBoard>{
+public class WAMGUI extends Application implements Observer<WAMBoard> {
     /**
      * a hole image.
      */
@@ -51,10 +51,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     private Stage stage;
 
 
-
     @Override
-    public void init() throws Exception
-    {
+    public void init() throws Exception {
         try {
             List<String> args = getParameters().getRaw();
             String host = args.get(0);
@@ -81,58 +79,58 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
      * @throws Exception if there is a problem
      */
     public void start(Stage stage) throws Exception {
-            this.stage = stage;
+        this.stage = stage;
 
-            // get the command line args
-            List<String> args = getParameters().getRaw();
+        // get the command line args
+        List<String> args = getParameters().getRaw();
 
-            // get rows and cols from the server's WELCOME message
-            int COLMSG = serverConn.getColumn();
-            int ROWMSG = serverConn.getRow();
-            GridPane gridPane = new GridPane();
-            buttons = new Button[COLMSG][ROWMSG];
+        // get rows and cols from the server's WELCOME message
+        int colmsg = serverConn.getColumn();
+        int rowmsg = serverConn.getRow();
+        GridPane gridPane = new GridPane();
+        buttons = new Button[colmsg][rowmsg];
 
 
-            for (int row = 0; row < ROWMSG; row++) {
-                for (int col = 0; col < COLMSG; col++) {
-                    Button button = new Button();
-                    ImageView moleImageView = new ImageView(holeImage);
-                    button.setGraphic(moleImageView);
-                    buttons[col][row] = button;
-                    gridPane.add(button, col, row);
-                    int id = row * COLMSG + col;
-                    button.setOnAction(event -> serverConn.whack(id));
-                }
+        for (int row = 0; row < rowmsg; row++) {
+            for (int col = 0; col < colmsg; col++) {
+                Button button = new Button();
+                ImageView moleImageView = new ImageView(holeImage);
+                button.setGraphic(moleImageView);
+                buttons[col][row] = button;
+                gridPane.add(button, col, row);
+                int moleNumber = row * colmsg + col;
+                button.setOnAction(event -> serverConn.whack(moleNumber));
             }
+        }
 
-            Text score = new Text("SCORE: ");
-            gridPane.add(score, 0, ROWMSG);
+        Text score = new Text("SCORE: ");
+        gridPane.add(score, 0, rowmsg);
 
 
+        Scene scene = new Scene(gridPane);
+        stage.setTitle("WAMGUI");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
 
-            Scene scene = new Scene(gridPane);
-            stage.setTitle("WAMGUI");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-
-            this.serverConn.startListener();
+        this.serverConn.startListener();
 
 
     }
 
     /**
      * Do all the GUI update
+     *
      * @param board the model of the game
      */
-    private void refresh(WAMBoard board){
+    private void refresh(WAMBoard board) {
         this.board = board;
         GridPane gridPane = new GridPane();
-        for (int r = 0; r < serverConn.getRow(); r++){
-            for (int c = 0; c < serverConn.getColumn(); c++){
+        for (int r = 0; r < serverConn.getRow(); r++) {
+            for (int c = 0; c < serverConn.getColumn(); c++) {
                 Image image = holeImage;
                 int content = board.getContents(c, r);
-                if (content == 1){
+                if (content == 1) {
                     image = moleImage;
                 } else {
                     image = holeImage;
@@ -143,7 +141,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
             }
         }
         //TODO need to get scoring and time remaining and add here
-        gridPane.add(new Text("TIME: "), serverConn.getColumn()-1, serverConn.getRow()); //add time
+        gridPane.add(new Text("TIME: "), serverConn.getColumn() - 1, serverConn.getRow()); //add time
         gridPane.add(new Text("SCORE: "), 0, serverConn.getRow()); //add score
         Scene scene = new Scene(gridPane);
         stage.setScene(scene);
@@ -155,7 +153,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
     /**
      * Notify the observer when the game ends.
      */
-    private synchronized void endGame(){
+    private synchronized void endGame() {
         this.notify();
     }
 
@@ -166,8 +164,8 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
      * @param board
      */
     @Override
-    public void update(WAMBoard board){
-        if (Platform.isFxApplicationThread()){
+    public void update(WAMBoard board) {
+        if (Platform.isFxApplicationThread()) {
             this.refresh(board);
         } else {
             Platform.runLater(() -> this.refresh(board));
@@ -179,14 +177,11 @@ public class WAMGUI extends Application implements Observer<WAMBoard>{
      *
      * @param args command line arguments
      */
-    public static void main(String[] args)
-    {
-        if (args.length != 2)
-        {
+    public static void main(String[] args) {
+        if (args.length != 2) {
             System.out.println("Usage: java host port");
             System.exit(-1);
-        } else
-        {
+        } else {
             Application.launch(args);
         }
     }

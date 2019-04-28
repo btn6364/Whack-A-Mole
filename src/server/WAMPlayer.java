@@ -30,21 +30,20 @@ public class WAMPlayer implements Closeable, Runnable {
         }
     }
 
+    public Scanner getScanner(){
+        return this.scanner;
+    }
 
     public void welcome(int rows, int col, int numOfPlayers, int playerIndex) {
         printer.println(WELCOME + " " + rows + " " + col + " " + numOfPlayers + " " + playerIndex);
-        printer.flush();
     }
-
 
     public void moleUp(int moleNumber) {
         printer.println(MOLE_UP + " " + moleNumber);
-        printer.flush();
     }
 
     public void moleDown(int moleNumber) {
         printer.println(MOLE_DOWN + " " + moleNumber);
-        printer.flush();
     }
 
     public void gameWon() {
@@ -64,43 +63,24 @@ public class WAMPlayer implements Closeable, Runnable {
     }
 
     /**
-     * @param moleNum
-     * @param playerNum
+     * @param moleNumber
+     * @param playerNumber
      */
-    public void whack(int moleNum, int playerNum) throws Exception {
-//        if (game.isUp(moleNumber)) {
-//            game.setDown(moleNumber);
-//            //TODO add 2 to score
-//        } else {
-//            //TODO decrease score by 1
-//        }
-        String response = scanner.nextLine();
-        if (response.startsWith(WHACK)){
-            String[] tokens = response.split(" ");
-            if (tokens.length == 3){
-                //TODO
-                int moleNumber = Integer.parseInt(tokens[1]);
-                int playerNumber = Integer.parseInt(tokens[2]);
-                if (game.isUp(moleNumber)){
-                    game.setDown(moleNumber);
-                    this.scorePoint += 2;
-                } else {
-                    System.out.println("Miss!");
-                    this.scorePoint --;
-                }
-
-            } else {
-                throw new Exception("Invalid player response: " + response);
-            }
+    public void whack(int moleNumber, int playerNumber) {
+        if (game.isUp(moleNumber)) {
+            game.setDown(moleNumber);
+            this.scorePoint += 2;
         } else {
-            throw new Exception("Invalid player response: " + response);
+            this.scorePoint--;
         }
+        System.out.println("Current score:" + this.scorePoint);
     }
 
-    public void score(WAMPlayer[] players){
+    public void score(WAMPlayer[] players) {
         //TODO
 
     }
+
     @Override
     public void close() {
         try {
@@ -114,22 +94,17 @@ public class WAMPlayer implements Closeable, Runnable {
         this.game = game;
     }
 
-
     @Override
-    public void run() {//?
-        try {
+    public void run() {
+        boolean check = true;
+        while (check) {
             String request = this.scanner.next();
-            String[] argument = this.scanner.nextLine().trim().split(" ");
-            while(true)
-            {
-                if (request.equals(WHACK))
-                {
-                    whack(Integer.parseInt(argument[0]), Integer.parseInt(argument[1]));
-                }
+            String[] arguments = this.scanner.nextLine().trim().split("\\s+");
+            if (request.equals(WHACK)) {
+                int moleNumber = Integer.parseInt(arguments[0]);
+                int playerNumber = Integer.parseInt(arguments[1]);
+                whack(moleNumber, playerNumber);
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
