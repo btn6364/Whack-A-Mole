@@ -51,6 +51,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
     private Stage stage;
 
 
+    /**
+     * Do all the set up for the GUI.
+     * @throws Exception the Exception if the server goes wrong.
+     */
     @Override
     public void init() throws Exception {
         try {
@@ -163,6 +167,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         }
     }
 
+    /**
+     * Show the pop-up information about the game result
+     * @param message the result message
+     */
     private void showDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Over!");
@@ -171,6 +179,10 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
         alert.showAndWait();
     }
 
+    /**
+     * Show the pop-up information about the error
+     * @param message the error message
+     */
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Game Over!");
@@ -190,7 +202,7 @@ public class WAMGUI extends Application implements Observer<WAMBoard> {
      * Called by the model, client.ConnectFourBoard, whenever there is a state change
      * that needs to be updated by the GUI.
      *
-     * @param board
+     * @param board the board of the game
      */
     @Override
     public void update(WAMBoard board) {

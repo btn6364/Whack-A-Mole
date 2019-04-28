@@ -15,11 +15,11 @@ import common.WAMProtocol;
  */
 public class WAMClient {
     /**
-     * client socket to communicate with server
+     * Client socket to communicate with server
      */
     private Socket clientSocket;
     /**
-     * used to read requests from the server
+     * Used to read requests from the server
      */
     private Scanner networkIn;
     /**
@@ -27,29 +27,67 @@ public class WAMClient {
      */
     private PrintStream networkOut;
     /**
-     * sentinel loop used to control the main loop
+     * Sentinel loop used to control the main loop
      */
     private boolean go;
     /**
-     * the model which keeps track of the game
+     * The model which keeps track of the game
      */
     private WAMBoard board;
     /**
-     * the tokens to store the value from the WELCOME message
+     * The tokens to store the value from the WELCOME message
      */
     private String[] tokens;
 
+    /**
+     * The row that can be obtained from the welcome message
+     */
     private int rowMsg;
+
+    /**
+     * The column that can be obtained from the welcome message
+     */
     private int colMsg;
+
+    /**
+     * The number of players
+     */
     private int numberOfPlayers;
+
+    /**
+     * The player index
+     */
     private int playerNumber;
+
+    /**
+     * The score of the player
+     */
     private int myScore;
+
+    /**
+     * The game result type
+     */
     private int gameResult;
 
     protected static final int RESULT_ONGOING = 0;
+    /**
+     * The variable used for winning result.
+     */
     protected static final int RESULT_WON = 1;
+
+    /**
+     * The variable used for losing result.
+     */
     protected static final int RESULT_LOST = 2;
+
+    /**
+     * The variable used for tied result.
+     */
     protected static final int RESULT_TIED = 3;
+
+    /**
+     * The variable used for error message.
+     */
     protected static final int RESULT_ERROR = 4;
     /**
      * Accessor that takes multithreaded access into account
@@ -100,10 +138,18 @@ public class WAMClient {
         }
     }
 
+    /**
+     * Get the board
+     * @return the board
+     */
     public WAMBoard getBoard() {
         return board;
     }
 
+    /**
+     * Get the game result
+     * @return the game result
+     */
     public int getGameResult(){
         return gameResult;
     }
@@ -173,20 +219,36 @@ public class WAMClient {
         this.board.alertObservers();
     }
 
+    /**
+     * Send a WHACK message from the client to the server
+     * @param moleNumber the mole number to send
+     */
     public void whack(int moleNumber) {
         networkOut.println(WAMProtocol.WHACK + " " + moleNumber + " " + playerNumber);
     }
 
+    /**
+     * Update the score of the player.
+     * @param arguments
+     */
     public void updateScore(String arguments){
         String[] tokens = arguments.split("\\s+");
         this.myScore = Integer.parseInt(tokens[this.playerNumber-1]);
         this.board.alertObservers();
     }
 
+    /**
+     * Get the score of the player.
+     * @return the score of the player.
+     */
     public int getMyScore(){
         return myScore;
     }
 
+    /**
+     * Update the result of the game.
+     * @param result the result of the game.
+     */
     public void updateResult(int result) {
         this.gameResult = result;
         this.board.alertObservers();
@@ -198,15 +260,11 @@ public class WAMClient {
      * outside will call it or try to start a thread on it.
      */
     private void run() {
-        System.out.println("good?");
         while (this.isGo()) {
             try {
                 String request = this.networkIn.next();
                 String arguments = this.networkIn.nextLine().trim();
                 System.out.println("Network in message = \"" + request + '"');
-                if (arguments.length() > 0) {
-                    System.out.println("arguments = \"" + arguments + '"');
-                }
 
                 switch (request) {
                     case WAMProtocol.MOLE_UP:
@@ -231,7 +289,6 @@ public class WAMClient {
                         this.stop();
                         break;
                     case WAMProtocol.ERROR:
-                        //TODO
                         updateResult(RESULT_ERROR);
                         this.stop();
                         break;
